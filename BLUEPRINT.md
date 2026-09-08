@@ -1,6 +1,6 @@
 # Boxing Center — depuis Tournefeuille · brief de site
 
-Loi commune : `../BLUEPRINT-SATELLITES-BOXING-CENTER.md`.
+Loi commune : `./BLUEPRINT-FAMILLE.md` (copie de `../BLUEPRINT-SATELLITES-BOXING-CENTER.md`).
 Domaine `www.boxingcenter-tournefeuille.fr` · dépôt `https://github.com/Eddy-etame/Boxingcenter-tournefeuille.git`.
 
 ## Destinations — DEUX (le seul satellite à choix)
@@ -44,7 +44,7 @@ Nav (tranché) : **Plannings ↗** et **Tarifs ↗** sont des menus à deux entr
 | MARDI_041 | `salle-mma-cage-tournefeuille.webp` | cage / rack | Le rack et la cage, poids au premier plan |
 Légende des « MARDI » : « … — Boxing Center » sans nommer de salle tant que la salle de cette séance n'est pas confirmée par Eddy (murs noirs, fresque grise : Saint-Cyprien ou États-Unis ?). Portet pour /mma/ (cage 050 si non prise ailleurs), légendée « — Boxing Center Portet-sur-Garonne ».
 
-## Système visuel — deux sous-familles se rencontrent : base Portet (papier chaud · encre · cuivre) ; la page /boxe-thai/ et la fiche Saint-Cyprien portent l'accent Saint-Cyprien (graphite + vert de fresque, à mesurer). Le moteur affiche la couleur du club résolu.
+## Système visuel — deux sous-familles se rencontrent : base Portet (papier chaud · encre · cuivre) ; la page /boxe-thai/ et la fiche Saint-Cyprien portent l'accent Saint-Cyprien — texte graphite `#3b3f47` (9,1:1 sur `#eeeeea`, mesuré), aplats vert de fresque `#9db83f` (loi commune §7). Le moteur affiche la couleur du club résolu.
 
 ## Concurrence : « club de boxe Tournefeuille », « MMA Tournefeuille », « boxe thaï Tournefeuille » + Fonsorbes, Plaisance-du-Touch.
 ## Bloquants : la salle de la séance « MARDI » (question posée à Eddy).
