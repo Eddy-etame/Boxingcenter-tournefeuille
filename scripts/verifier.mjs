@@ -195,9 +195,13 @@ for (const [route, fichier] of toutes) {
     const src = /src="\/photos\/([^"]+)"/.exec(balise)?.[1];
     if (src) {
       const nom = src.replace(/-\d+\.(avif|webp|jpg)$/, '');
-      const attendu = new RegExp(`^[a-z0-9-]+-${plat(VILLE)}(-[2-9])?$`);
+      // Une ville peut porter une apostrophe (« L'Union ») : le nom de fichier
+      // la perd. On accepte donc les deux formes, avec tiret ou sans rien.
+      const VILLE_SLUG = plat(VILLE).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      const VILLE_COMPACT = plat(VILLE).replace(/[^a-z0-9]+/g, '');
+      const attendu = new RegExp(`^[a-z0-9-]+-(${VILLE_SLUG}|${VILLE_COMPACT})(-[2-9])?$`);
       if (!attendu.test(plat(nom))) {
-        erreurs.push(ou(`nom de fichier non conforme : ${nom} (attendu <sujet>-${plat(VILLE)})`));
+        erreurs.push(ou(`nom de fichier non conforme : ${nom} (attendu <sujet>-${VILLE_COMPACT})`));
       }
       if (/fetchpriority="high"/.test(balise)) {
         const w = Number(/width="(\d+)"/.exec(balise)?.[1] ?? 0);

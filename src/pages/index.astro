@@ -259,13 +259,13 @@ const QUESTIONS = [
       <p class="cartouche"><span class="cartouche__num">09</span><span>Le secteur</span></p>
       <div class="secteur__tete">
         <h2 id="t-secteur">
-          {SITE.ville}, {SITE.codePostal},<br />
-          <span class="secteur__accent">et ce qu’il y a autour.</span>
+          Tu habites une commune à côté&nbsp;?<br />
+          <span class="secteur__accent">On a prévu ça aussi.</span>
         </h2>
         <p class="lead faible secteur__intro">
           {VILLE.population.valeur.replace(' (2023)', '')}, dans Toulouse
-          Métropole. Deux communes du secteur ont leur propre page ici, parce que
-          le trajet n’y commence pas au même endroit.
+          Métropole. Plaisance-du-Touch et Fonsorbes ont chacune sa page&nbsp;:
+          la ligne à prendre, la route, et le club au bout.
         </p>
       </div>
 
@@ -275,8 +275,12 @@ const QUESTIONS = [
             <a class="carte" href={`/${c.id}/`}>
               <span class="mono carte__cp">{c.codePostal}</span>
               <span class="carte__nom">{c.nom}</span>
-              <span class="carte__note">{c.cotes[1].valeur}</span>
-              <span class="mono carte__aller">Y aller depuis {c.nom} <span aria-hidden="true">→</span></span>
+              <span class="carte__trajet">
+                <span class="mono carte__ligne">{c.cotes[1].valeur}</span>
+                <span aria-hidden="true">→</span>
+                <span class="carte__club">deux clubs</span>
+              </span>
+              <span class="mono carte__aller">Le trajet depuis {c.nom} <span aria-hidden="true">→</span></span>
             </a>
           </li>
         ))}
@@ -517,6 +521,23 @@ const QUESTIONS = [
     letter-spacing: -0.015em;
   }
   .carte__note { font-size: var(--t-petit); color: var(--texte-faible); }
+  .carte__trajet {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45em;
+    font-size: var(--t-petit);
+    color: var(--texte-faible);
+  }
+  .carte__ligne {
+    padding: 0.12rem 0.45rem;
+    border-radius: 0.25rem;
+    background: var(--encre);
+    color: var(--papier-vif);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .carte__club { font-weight: 600; color: var(--encre); }
   .carte__aller { margin-top: var(--e-3); color: var(--signal-texte); text-transform: none; letter-spacing: 0.04em; }
 
   .secteur__cle { color: var(--graphite); margin-bottom: var(--e-3); }
