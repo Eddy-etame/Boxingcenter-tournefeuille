@@ -1,0 +1,44 @@
+---
+/**
+ * TRANSPORTS EN COMMUN — le trajet complet, de Cugnaux au 61 route d'Espagne.
+ *
+ * Le corps vit dans `components/Transports.astro`, piloté par
+ * `data/transports.ts` : les autres sites de la famille changent leur registre
+ * et héritent de la page.
+ */
+import Base from '../layouts/Base.astro';
+import Transports from '../components/Transports.astro';
+import { SITE, DESTINATION } from '../data/verite';
+
+const QUESTIONS = [
+  {
+    titre: `Quel bus va de ${SITE.ville} à ${DESTINATION.ville} ?`,
+    texte:
+      'La 85, qui traverse Cugnaux et finit son parcours à Portet Gare SNCF. Sur le parvis, la Linéo 5 repart et dessert l’arrêt « Route d’Espagne » : Boxing Center Portet-sur-Garonne est au 61 de cette rue. La 85 roule du lundi au samedi, la L5 sept jours sur sept.',
+  },
+  {
+    titre: 'Où se fait la correspondance ?',
+    texte:
+      'À Portet Gare SNCF. C’est le terminus de la 85 et de la 321, et le départ de la Linéo 5 : les deux bus se prennent sur le même parvis.',
+  },
+  {
+    titre: 'Et la 321 ?',
+    texte:
+      'Elle part de Frouzins Tréville, marque l’arrêt « Mairie Cugnaux » et rejoint Portet Gare SNCF en dix-neuf arrêts, du lundi au vendredi. La Linéo 5 prend le relais jusqu’à la route d’Espagne.',
+  },
+  {
+    titre: 'Je pars de Villeneuve-Tolosane ou de Frouzins.',
+    texte:
+      'La 85 marque l’arrêt « Mairie Villeneuve Tolosane » ; la 321 part de Frouzins Tréville. Les deux finissent à Portet Gare SNCF, où la L5 prend le relais jusqu’au club. Même correspondance, même arrivée.',
+  },
+  {
+    titre: 'Le samedi, quand le club est ouvert ?',
+    texte:
+      'La 85 roule du lundi au samedi et la Linéo 5 sept jours sur sept : le trajet du samedi se fait exactement comme celui de la semaine. Les horaires exacts sont publiés par Tisséo.',
+  },
+];
+---
+
+<Base page="transports" faq={QUESTIONS}>
+  <Transports />
+</Base>

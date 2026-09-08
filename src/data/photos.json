@@ -1,0 +1,56 @@
+{
+  "club-boxe-tournefeuille": {
+    "lqip": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAACQAwCdASoUAA0APxF2sVCsJySisAgBgCIJYwB3AAPe2RMv37RgAP7ZQp+SD0l2VuO+VfkgXkiexWXCuX2VmjcFVTprjo/MRFIAAA==",
+    "w": 6720,
+    "h": 4480,
+    "ratio": 1.5
+  },
+  "boxe-thai-tournefeuille": {
+    "lqip": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAACQAwCdASoUAAwAPxF2slEsJySisAgBgCIJZwAASmhQd6ne7jBQAP7ZWfOT+/eFEgQBG9lhxW07AS8gUNHAoAAA",
+    "w": 5880,
+    "h": 3484,
+    "ratio": 1.6877
+  },
+  "cours-boxe-tournefeuille": {
+    "lqip": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACwAwCdASoUAA0APxF4slEsJ6SisAgBgCIJZgDE2BhU4x97lg7gwAD+0DYCSXYQbKnK+WdQTRMeZ4TyBePORk/bxeAAAA==",
+    "w": 6720,
+    "h": 4480,
+    "ratio": 1.5
+  },
+  "coach-boxe-tournefeuille": {
+    "lqip": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADQAwCdASoUAA0APxF2slEsJySisAgBgCIJZgC/OBjP8jxxldjjEOAA/bAXXQugcpG7vAGiGJ5CLjuXchOdvgw9LnLFBEM88v11wAAA",
+    "w": 6720,
+    "h": 4480,
+    "ratio": 1.5
+  },
+  "boxe-femme-tournefeuille": {
+    "lqip": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAABwAwCdASoUAA0APxFysFAsJqSisAgBgCIJZwAASFfifwK5XoAA/kX8RFjz4uAwI63HsMnFZ0rRqJX1GIjUXovQLJU2cAAA",
+    "w": 6720,
+    "h": 4480,
+    "ratio": 1.5
+  },
+  "salle-de-boxe-tournefeuille": {
+    "lqip": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAACQAwCdASoUAAsAPxFwsFAsJiSisAgBgCIJbAAARhCyiJQGnDmAAP7czNH5YapZhS1LyBDAIBwXooOq+bt+7D2CMrJc/j1o2UAAAA==",
+    "w": 6584,
+    "h": 3490,
+    "ratio": 1.8865
+  },
+  "preparation-physique-tournefeuille": {
+    "lqip": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAACwAwCdASoUAAwAPxF0slCsJqSisAgBgCIJZwAAQRlt4f//UvggAAD+3ZfbqCKubJbReZh59jxP2Mx25QfTY+OzAAA=",
+    "w": 6720,
+    "h": 3950,
+    "ratio": 1.7013
+  },
+  "cage-mma-tournefeuille": {
+    "lqip": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADQAwCdASoUAA0APxF0sVAsJySisAgBgCIJZwAAXKJclkje09WSBYAA/oPMfRgBUlQx3SP0BAbe9uWWjuOGwCX2AAA=",
+    "w": 6720,
+    "h": 4480,
+    "ratio": 1.5
+  },
+  "boxe-enfant-tournefeuille": {
+    "lqip": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADQAwCdASoUAA0APxF0slCsJqSisAgBgCIJQBUehDn1puWWj/KpzAAA/tzJ/fv0vEQwaA69DU0QN1L+EU7rOrzUrW+WsBRQhvleAAAA",
+    "w": 6306,
+    "h": 4027,
+    "ratio": 1.5659
+  }
+}

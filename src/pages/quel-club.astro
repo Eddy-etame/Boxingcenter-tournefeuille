@@ -1,0 +1,276 @@
+---
+/**
+ * QUEL CLUB — le moteur, à part entière.
+ *
+ * C'est la vraie question de ce site : deux clubs, lequel viser. Elle a une
+ * réponse factuelle, et cette page la donne — d'abord par le moteur, ensuite
+ * par le tableau qui montre noir sur blanc qui publie quoi.
+ */
+import Base from '../layouts/Base.astro';
+import Seance from '../components/Seance.astro';
+import Photo from '../components/Photo.astro';
+import { SITE, CLUBS } from '../data/verite';
+import { OFFRES, type Famille } from '../data/offres';
+import { ROLES } from '../data/medias';
+import { route } from '../data/routes';
+import { itineraireDuClub } from '../data/transports';
+
+/** Les familles, dans l'ordre où on les cherche, et leur nom lisible. */
+const FAMILLES: readonly { id: Famille; nom: string }[] = [
+  { id: 'boxe-anglaise', nom: 'Boxe anglaise' },
+  { id: 'thai', nom: 'Boxe thaï / K1' },
+  { id: 'kick-boxing', nom: 'Kick-boxing' },
+  { id: 'mma', nom: 'MMA' },
+  { id: 'grappling', nom: 'Grappling & JJB' },
+  { id: 'sparring', nom: 'Open Sparring' },
+  { id: 'femme', nom: 'Cours entre femmes' },
+  { id: 'physique', nom: 'Cross-training & prépa' },
+  { id: 'enfants', nom: 'Enfants et ados' },
+];
+
+const publie = (famille: Famille, club: string) =>
+  OFFRES.some((o) => o.famille === famille && o.club === club);
+
+const QUESTIONS = [
+  {
+    titre: 'Saint-Cyprien ou Portet : lequel choisir ?',
+    texte:
+      'Ça dépend de ce que tu cherches. La boxe thaï, le K1, l’Open Sparring et le cross-training sont publiés par Saint-Cyprien. Le MMA en cage et le grappling sont publiés par Portet-sur-Garonne. La boxe anglaise, les cours entre femmes et les cours enfants existent dans les deux — là, c’est le trajet qui décide.',
+  },
+  {
+    titre: 'Et si les deux clubs proposent ce que je cherche ?',
+    texte:
+      'Le soir, prends Saint-Cyprien : le Linéo L3 descend aux Arènes, le métro A t’emmène à Saint-Cyprien – République, et le club est à quatre minutes. Le midi et l’après-midi, Portet est plus simple en voiture, avec du stationnement sur place.',
+  },
+  {
+    titre: 'Je peux m’inscrire dans les deux ?',
+    texte:
+      'C’est une question d’abonnement, et elle appartient aux clubs. Chacun publie ses formules sur son propre site. Pose-leur la question avant de t’inscrire.',
+  },
+  {
+    titre: 'Les horaires sont les mêmes ?',
+    texte:
+      'Presque : Saint-Cyprien accueille de 10h à 21h15, Portet-sur-Garonne de 10h à 21h30, du lundi au samedi tous les deux. Le détail cours par cours est sur le planning de chaque club.',
+  },
+];
+---
+
+<Base page="quel-club" ogPhoto={ROLES.calme} faq={QUESTIONS}>
+  <section class="section tete" aria-labelledby="t-page" data-sans-scene>
+    <div class="enveloppe tete__inner">
+      <nav class="fil mono" aria-label="Fil d’Ariane">
+        <a href="/">Accueil</a><span aria-hidden="true">/</span>
+        <span aria-current="page">Quel club</span>
+      </nav>
+      <h1 id="t-page">Saint-Cyprien ou Portet&nbsp;: lequel viser</h1>
+      <p class="tete__chapeau">
+        Deux clubs Boxing Center sont accessibles depuis {SITE.ville}. Ce qui
+        décide, ce n’est pas une préférence&nbsp;: c’est ce que chacun publie. Le
+        tableau plus bas le montre ligne par ligne, et le moteur te donne la
+        réponse en deux clics.
+      </p>
+    </div>
+  </section>
+
+  <Seance titre={'Deux réponses,\net tu sais lequel viser.'} />
+
+  {/* Le tableau : qui publie quoi, sans commentaire. */}
+  <section class="section tableau" aria-labelledby="t-tableau">
+    <div class="enveloppe">
+      <p class="cartouche"><span class="cartouche__num">—</span><span>Qui publie quoi</span></p>
+      <h2 id="t-tableau">Le tableau des deux clubs.</h2>
+      <p class="lead faible tableau__intro">
+        Relevé sur les pages « activités » des deux clubs. Une croix veut dire que
+        le club publie cette pratique aujourd’hui.
+      </p>
+
+      <div class="tableau__boite">
+        <table class="tableau__grille">
+          <caption class="vh">
+            Disciplines publiées par Boxing Center Saint-Cyprien et par Boxing
+            Center Portet-sur-Garonne
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Discipline</th>
+              {CLUBS.map((c) => <th scope="col">{c.nomCourt}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {FAMILLES.map((f, i) => (
+              <tr class="reveler" style={`--retard:${i * 45}ms`}>
+                <th scope="row">{f.nom}</th>
+                {CLUBS.map((c) => (
+                  <td>
+                    {publie(f.id, c.id) ? (
+                      <span class="oui" aria-label="publié par ce club">●</span>
+                    ) : (
+                      <span class="vide" aria-label="ailleurs dans le réseau">—</span>
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  {/* Les deux fiches, côte à côte. */}
+  <section class="section creuse fiches" aria-labelledby="t-fiches">
+    <div class="enveloppe">
+      <p class="cartouche"><span class="cartouche__num">—</span><span>Les deux clubs</span></p>
+      <h2 id="t-fiches">Adresse, horaires, et comment y aller.</h2>
+      <ul class="fiches__liste">
+        {CLUBS.map((c, i) => {
+          const it = itineraireDuClub(c.id);
+          return (
+            <li class="reveler" style={`--retard:${i * 90}ms`}>
+              <p class="mono fiches__cle">{c.nom}</p>
+              <p class="fiches__adresse">{c.adresse}</p>
+              <p class="fiches__horaires">{c.horaires.valeur}</p>
+              <p class="fiches__angle">{c.angle}</p>
+              {it && (
+                <p class="mono fiches__trajet">
+                  {it.etapes.map((e) => e.code).join(' → ')}
+                </p>
+              )}
+              <div class="fiches__actions">
+                <a class="bouton bouton--signal" href={c.plannings} rel="noopener">
+                  <span>Le planning</span><span class="fleche" aria-hidden="true">↗</span>
+                </a>
+                <a class="bouton" href={c.tarifs} rel="noopener">
+                  <span>Les tarifs</span><span class="fleche" aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section faq" aria-labelledby="t-faq">
+    <div class="enveloppe faq__inner">
+      <div>
+        <p class="cartouche"><span class="cartouche__num">—</span><span>Questions</span></p>
+        <h2 id="t-faq">Ce qu’on nous demande le plus souvent.</h2>
+        <Photo slug={ROLES.calme} sizes="(max-width: 62rem) 100vw, 30vw" ratio="4 / 3" class="faq__photo" />
+      </div>
+      <div class="faq__liste">
+        {QUESTIONS.map((q, i) => (
+          <details class="qr" open={i === 0}>
+            <summary><span class="qr__q">{q.titre}</span><span class="qr__signe" aria-hidden="true"></span></summary>
+            <p class="qr__r">{q.texte}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section encre suite" aria-labelledby="t-suite">
+    <div class="enveloppe suite__inner">
+      <p class="cartouche"><span class="cartouche__num">—</span><span>Ensuite</span></p>
+      <h2 id="t-suite">Tu sais lequel viser.</h2>
+      <p class="lead">
+        Regarde le planning du club, ou écris-nous en deux lignes&nbsp;: on te
+        répond avec un créneau.
+      </p>
+      <div class="suite__actions">
+        <a class="bouton bouton--signal" href={route('premiere-seance').chemin}>
+          <span>Ma première séance</span><span class="fleche" aria-hidden="true">→</span>
+        </a>
+        <a class="bouton" href={route('transports').chemin}>
+          <span>Y aller sans voiture</span><span class="fleche" aria-hidden="true">→</span>
+        </a>
+        <a class="bouton" href={route('contact').chemin}>
+          <span>Poser ma question</span><span class="fleche" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete__inner { max-width: 60rem; }
+  .fil { display: flex; gap: var(--e-2); margin-bottom: var(--e-5); }
+  .fil a { color: var(--graphite); text-decoration: none; }
+  .fil a:hover { color: var(--signal-texte); }
+  .fil span[aria-current] { color: var(--encre-pale); }
+  .tete h1 { max-width: 18ch; margin-bottom: var(--e-5); }
+  .tete__chapeau {
+    max-width: 62ch;
+    padding-left: var(--e-5);
+    border-left: 2px solid var(--signal);
+    font-size: var(--t-lead);
+    line-height: 1.5;
+    color: var(--texte-faible);
+  }
+
+  .tableau h2 { max-width: 18ch; margin-bottom: var(--e-4); }
+  .tableau__intro { max-width: 50ch; margin-bottom: var(--e-6); }
+  .tableau__boite { overflow-x: auto; }
+  .tableau__grille {
+    width: 100%;
+    min-width: 26rem;
+    border-collapse: collapse;
+    font-size: var(--t-petit);
+  }
+  .tableau__grille th,
+  .tableau__grille td {
+    padding: var(--e-4) var(--e-3);
+    border-bottom: 1px solid var(--trait);
+    text-align: left;
+  }
+  .tableau__grille thead th {
+    font-family: var(--police-mono);
+    font-size: var(--t-micro);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--graphite);
+    border-bottom-color: var(--encre);
+  }
+  .tableau__grille tbody th { font-weight: 600; }
+  .tableau__grille td { text-align: center; width: 8rem; }
+  .oui { color: var(--signal-texte); font-size: 1.1em; }
+  .vide { color: var(--graphite); }
+  .tableau__grille tbody tr { transition: background var(--d-rapide) var(--e-mecanique); }
+  .tableau__grille tbody tr:hover { background: var(--signal-voile); }
+
+  .fiches h2 { max-width: 20ch; margin-bottom: var(--e-6); }
+  .fiches__liste {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: var(--e-5);
+  }
+  .fiches__liste li {
+    display: grid;
+    gap: var(--e-3);
+    align-content: start;
+    padding: var(--e-5);
+    border-top: 2px solid var(--signal);
+    background: var(--papier-vif);
+  }
+  .fiches__cle { color: var(--signal-texte); font-weight: 700; }
+  .fiches__adresse { font-weight: 600; font-size: var(--t-petit); }
+  .fiches__horaires,
+  .fiches__angle { font-size: var(--t-petit); color: var(--texte-faible); }
+  .fiches__trajet { color: var(--graphite); }
+  .fiches__actions { display: flex; flex-wrap: wrap; gap: var(--e-2); margin-top: var(--e-3); }
+
+  .faq__inner {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: var(--e-8);
+    align-items: start;
+  }
+  @media (max-width: 62rem) { .faq__inner { grid-template-columns: 1fr; gap: var(--e-6); } }
+  .faq h2 { max-width: 16ch; margin-bottom: var(--e-6); }
+
+  .suite__inner { max-width: 46rem; }
+  .suite h2 { margin-bottom: var(--e-4); }
+  .suite .lead { max-width: 46ch; }
+  .suite__actions { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-6); }
+</style>
