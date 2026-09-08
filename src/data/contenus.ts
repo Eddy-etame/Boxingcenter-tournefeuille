@@ -116,7 +116,7 @@ export const CONTENUS: readonly Contenu[] = [
       {
         titre: 'Il faut être souple ?',
         texte:
-          'Non, la souplesse vient avec les séances. Les premières semaines, les coups de pied restent bas — et le low kick, qui est bas par définition, est l’arme la plus utilisée de la discipline. La hauteur arrive toute seule avec les étirements de fin de séance.',
+          'La souplesse vient avec les séances. Les premières semaines, les coups de pied restent bas — et le low kick, qui est bas par définition, est l’arme la plus utilisée de la discipline. La hauteur arrive toute seule avec les étirements de fin de séance.',
       },
       {
         titre: 'Et si tu préfères commencer plus simple',

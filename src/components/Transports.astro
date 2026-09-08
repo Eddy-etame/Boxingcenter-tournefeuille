@@ -45,6 +45,19 @@ const noeuds = (it: (typeof ITINERAIRES)[number]) => [
     code: it.etapes[i + 1]?.code ?? '',
   })),
 ];
+/* Une règle d'affichage par itinéraire, écrite depuis le registre. Elles
+   partent en <style is:inline> parce qu'une feuille scopée ne peut pas
+   recevoir de contenu calculé. */
+const CSS_PANNEAUX = ITINERAIRES.map(
+  (it) => `.selecteur:has(#trajet-${it.id}:checked) ~ .panneaux .panneau--${it.id} { display: block; }`
+).join('\n');
+
+/* Le nombre de trajets se compte, il ne s'écrit pas. */
+const NOMBRES = ['zéro', 'un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix'];
+const COMBIEN_TRAJETS =
+  ITINERAIRES.length === 1
+    ? 'Un seul trajet.'
+    : `${NOMBRES[ITINERAIRES.length] ?? ITINERAIRES.length} trajets possibles.`;
 ---
 
 <section class="section tete" aria-labelledby="t-page" data-sans-scene>
@@ -80,7 +93,7 @@ const noeuds = (it: (typeof ITINERAIRES)[number]) => [
   <div class="enveloppe">
     <h2 id="t-modes" class="modes__titre">Transports en commun</h2>
     <p class="lead faible modes__intro">
-      Deux trajets possibles. Choisis le tien&nbsp;: tu verras les arrêts dans
+      {COMBIEN_TRAJETS} Choisis le tien&nbsp;: tu verras les arrêts dans
       l’ordre, et le lien vers les horaires du jour.
     </p>
 
@@ -107,6 +120,8 @@ const noeuds = (it: (typeof ITINERAIRES)[number]) => [
         </>
       ))}
     </fieldset>
+
+    <style is:inline set:html={CSS_PANNEAUX}></style>
 
     <div class="panneaux">
       {ITINERAIRES.map((it) => (
@@ -391,11 +406,9 @@ const noeuds = (it: (typeof ITINERAIRES)[number]) => [
   /* ── Les panneaux ──────────────────────────────────────────────────── */
   .panneau { display: none; }
   .selecteur:has(.selecteur__radio:checked) ~ .panneaux .panneau { display: none; }
-  /* Le panneau du trajet coché. Une règle par identifiant du registre. */
-  .selecteur:has(#trajet-express:checked) ~ .panneaux .panneau--express,
-  .selecteur:has(#trajet-train:checked) ~ .panneaux .panneau--train,
-  .selecteur:has(#trajet-quatre-vingt-cinq:checked) ~ .panneaux .panneau--quatre-vingt-cinq,
-  .selecteur:has(#trajet-trois-cent-vingt-et-un:checked) ~ .panneaux .panneau--trois-cent-vingt-et-un { display: block; }
+  /* Le panneau du trajet coché s'affiche par une règle générée depuis le
+     registre, juste sous le sélecteur — écrire ces règles à la main revenait
+     à laisser un onglet muet dès qu'un itinéraire changeait de nom. */
 
   /* Sans :has (navigateurs anciens) : tout est visible. On ne cache jamais
      une information derrière une capacité du navigateur. */

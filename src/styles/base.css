@@ -9,7 +9,10 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  scroll-padding-top: 6rem;
+  /* Le décalage d'ancre tient compte de l'entête ET du geste d'entrée :
+     un bloc arrive translaté de --mouv-y et remonte en se posant. Sans
+     cette marge, la cible d'une ancre finit sous la barre. */
+  scroll-padding-top: calc(6rem + var(--mouv-y, 0rem));
 }
 
 body {
