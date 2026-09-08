@@ -9,7 +9,7 @@
 import Base from '../layouts/Base.astro';
 import Seance from '../components/Seance.astro';
 import Photo from '../components/Photo.astro';
-import { SITE, CLUBS } from '../data/verite';
+import { SITE, CLUBS, club } from '../data/verite';
 import { OFFRES, type Famille } from '../data/offres';
 import { ROLES } from '../data/medias';
 import { route } from '../data/routes';
@@ -50,7 +50,7 @@ const QUESTIONS = [
   {
     titre: 'Les horaires sont les mêmes ?',
     texte:
-      'Presque : Saint-Cyprien accueille de 10h à 21h15, Portet-sur-Garonne de 10h à 21h30, du lundi au samedi tous les deux. Le détail cours par cours est sur le planning de chaque club.',
+      `Presque : Saint-Cyprien accueille de ${club('saint-cyprien').ouvertureTexte} à ${club('saint-cyprien').fermetureTexte}, Portet-sur-Garonne de ${club('portet').ouvertureTexte} à ${club('portet').fermetureTexte}, du lundi au samedi tous les deux. Le détail cours par cours est sur le planning de chaque club.`,
   },
 ];
 ---

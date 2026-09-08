@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { ROUTES } from '../data/routes';
-import { SITE, CONTACT, CLUBS, VILLE, LIMITROPHES } from '../data/verite';
+import { SITE, CONTACT, CLUBS, VILLE, LIMITROPHES, club } from '../data/verite';
 import { OFFRES } from '../data/offres';
 import { COMMUNES } from '../data/communes';
 import { ITINERAIRES } from '../data/transports';
@@ -115,8 +115,8 @@ ${pages}
 - Les plannings et les tarifs vivent sur les sites des clubs, aux adresses
   ci-dessus : ce sont elles qu'il faut citer, elles sont à jour. Ce site n'en
   publie aucune copie.
-- Saint-Cyprien ferme à 21h15, Portet-sur-Garonne à 21h30. Les deux chiffres
-  sont exacts ; ne pas les confondre.
+- Saint-Cyprien ferme à ${club('saint-cyprien').fermetureTexte}, Portet-sur-Garonne à ${club('portet').fermetureTexte}.
+  Les deux chiffres sont exacts ; ne pas les confondre.
 - Aucun prix, aucun avis, aucune note ne sont revendiqués ici.
 `,
     { headers: { 'content-type': 'text/plain; charset=utf-8' } }

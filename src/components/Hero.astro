@@ -15,7 +15,7 @@
  * Sans JavaScript et en mouvement réduit, le plan est déjà à son état final.
  * Deux tracés existent, horizontal et vertical.
  */
-import { SITE, CLUBS } from '../data/verite';
+import { SITE, CLUBS, club } from '../data/verite';
 import { route } from '../data/routes';
 
 const [SC, PT] = CLUBS;
@@ -80,9 +80,9 @@ const [SC, PT] = CLUBS;
     <figure class="plan" data-plan>
       <figcaption class="vh">
         Depuis Tournefeuille (31170), deux clubs Boxing Center : Saint-Cyprien,
-        11 rue Sainte-Lucie à Toulouse, ouvert de 10h à 21h15 du lundi au samedi,
+        11 rue Sainte-Lucie à Toulouse, ouvert de {club('saint-cyprien').ouvertureTexte} à {club('saint-cyprien').fermetureTexte} du lundi au samedi,
         à quatre minutes du métro A ; et Portet-sur-Garonne, 61 route d’Espagne,
-        ouvert de 10h à 21h30, 600 m² avec un ring et une cage MMA.
+        ouvert de {club('portet').ouvertureTexte} à {club('portet').fermetureTexte}, 600 m² avec un ring et une cage MMA.
       </figcaption>
 
       {/* ── Tracé horizontal — écrans larges ── */}
