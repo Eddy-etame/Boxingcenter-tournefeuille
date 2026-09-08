@@ -5,7 +5,7 @@ Domaine `www.boxingcenter-tournefeuille.fr` · dépôt `https://github.com/Eddy-
 
 ## Destinations — DEUX (le seul satellite à choix)
 1. **Boxing Center Portet-sur-Garonne** — faits/URLs/offre : brief Muret.
-2. **Boxing Center Saint-Cyprien** · 11 rue Sainte-Lucie, 31300 Toulouse · 05 62 24 46 82 · **métro A Saint-Cyprien-République à 4 min** · parking Saint-Cyprien à proximité · horaires : **21h15 sur le site vivant, 21h30 dans le dépôt bc-st-cyprien → à trancher avant publication**.
+2. **Boxing Center Saint-Cyprien** · 11 rue Sainte-Lucie, 31300 Toulouse · 05 62 24 46 82 · **métro A Saint-Cyprien-République à 4 min** · parking Saint-Cyprien à proximité · horaires : **lun–sam 10h–21h15** (tranché par Eddy, 2026-09-08 — Saint-Cyprien ferme à 21h15, c'est ce que dit son planning). Dans le registre, les horaires sont par club : Portet 21h30, Saint-Cyprien 21h15..
    URLs : `https://club-boxe-toulouse.com/` · `/activites/` · `/plannings/` · `/tarifs/` · `/seance-offerte/` · `/la-salle/`.
    Offre réelle (site, 2026-09-08) : Boxe anglaise · K1 · **Muay Thaï** · Cross-training · Préparation physique (+ Lady Punch / boxe éducative visibles dans le stock photo → vérifier sur /activites/). Ring, cage. Coachs : Dadi (anglaise), Tawee (pieds-poings), Brice ; stock photo : Boumenir, Chavaudra, Daffe, Jérôme, Mehdi, Sonia, Tancrède, Valentin. Offres : 1re séance 10 €, 29 € / 4 semaines sans engagement, 44 €.
    Fun fact : « à 4 minutes du métro A ».
@@ -31,20 +31,20 @@ Nav : Plannings ↗ et Tarifs ↗ ouvrent un **menu à deux entrées** (Portet /
 ## Mots-clés
 9 motifs × {Tournefeuille, Fonsorbes, Plaisance-du-Touch}. **Retirer Tournefeuille et Plaisance-du-Touch de Colomiers** le jour de la mise en ligne. Secondaires : 31170, Linéo L3, ouest toulousain, métro Saint-Cyprien, Muay Thaï, K1.
 
-## Images — 8 « MARDI » (Saint-Cyprien, 6720 px, © Axel Derewiany) en tête + Portet (non utilisées par Muret/Cugnaux) + stock st_cyprien (768×512 : portraits coachs en vignette)
+## Images — 8 « MARDI » (Saint-Cyprien, 6720 px) en tête + Portet (non utilisées par Muret/Cugnaux) + stock st_cyprien (768×512 : portraits coachs en vignette)
 | Source | Nom | Usage | Alt |
 |---|---|---|---|
-| MARDI_030 | `club-boxe-tournefeuille-boxing-center-01.jpg` | **hero** | Le ring au tablier Boxing Center devant la fresque grise des deux boxeurs |
-| MARDI_089 | `boxe-thai-tournefeuille-boxing-center-02.jpg` | /boxe-thai/ | Une jeune pratiquante en garde, gants rose-or |
-| MARDI_045 | `cours-boxe-tournefeuille-sacs-boxing-center-03.jpg` | boxe anglaise / femme | Un groupe aux sacs Metal Boxe, sol bleu |
-| MARDI_038 | `coach-boxe-tournefeuille-boxing-center-04.jpg` | encadrement | Un coach bras croisés devant le ring |
-| MARDI_084 | `boxe-femme-tournefeuille-boxing-center-05.jpg` | Lady Punch | Une pratiquante en shadow boxing devant la fresque |
-| MARDI_028 | `salle-boxe-tournefeuille-boxing-center-06.jpg` | la salle | La salle vide, sacs, ring, sol bleu et rouge |
-| MARDI_029 | `preparation-physique-tournefeuille-boxing-center-07.jpg` | cross-training | Le plateau cardio sur gazon devant la fresque |
-| MARDI_041 | `salle-mma-tournefeuille-cage-boxing-center-08.jpg` | cage / rack | Le rack et la cage, poids au premier plan |
+| MARDI_030 | `club-boxe-tournefeuille.webp` | **hero** | Le ring au tablier Boxing Center devant la fresque grise des deux boxeurs |
+| MARDI_089 | `boxe-thai-tournefeuille.webp` | /boxe-thai/ | Une jeune pratiquante en garde, gants rose-or |
+| MARDI_045 | `cours-boxe-sacs-tournefeuille.webp` | boxe anglaise / femme | Un groupe aux sacs Metal Boxe, sol bleu |
+| MARDI_038 | `coach-boxe-tournefeuille.webp` | encadrement | Un coach bras croisés devant le ring |
+| MARDI_084 | `boxe-femme-tournefeuille.webp` | Lady Punch | Une pratiquante en shadow boxing devant la fresque |
+| MARDI_028 | `salle-boxe-tournefeuille.webp` | la salle | La salle vide, sacs, ring, sol bleu et rouge |
+| MARDI_029 | `preparation-physique-tournefeuille.webp` | cross-training | Le plateau cardio sur gazon devant la fresque |
+| MARDI_041 | `salle-mma-cage-tournefeuille.webp` | cage / rack | Le rack et la cage, poids au premier plan |
 Légende : « Boxing Center Saint-Cyprien, Toulouse ». Portet pour /mma/ (cage 050 si non prise ailleurs).
 
 ## Système visuel — deux sous-familles se rencontrent : base Portet (papier chaud · encre · cuivre) ; la page /boxe-thai/ et la fiche Saint-Cyprien portent l'accent Saint-Cyprien (graphite + vert de fresque, à mesurer). Le moteur affiche la couleur du club résolu.
 
 ## Concurrence : « club de boxe Tournefeuille », « MMA Tournefeuille », « boxe thaï Tournefeuille » + Fonsorbes, Plaisance-du-Touch.
-## Bloquants : horaires Saint-Cyprien · Muay Thaï/MMA de Saint-Cyprien à confirmer sur /activites/ · forme de la nav Plannings/Tarifs à deux clubs · droits photos.
+## Bloquants : Muay Thaï/MMA de Saint-Cyprien à confirmer sur /activites/ · forme de la nav Plannings/Tarifs à deux clubs.
