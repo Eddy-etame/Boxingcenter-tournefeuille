@@ -158,6 +158,13 @@ for (const [route, fichier] of toutes) {
     }
   }
 
+  // 3 bis — une distance en kilomètres. On mesure le trajet en lignes, pas en
+  // kilomètres : un chiffre en km éloigne, un numéro de ligne rapproche. La
+  // règle vaut aussi contre le texte hérité d'un autre site de la famille.
+  for (const m of txt.matchAll(/\d{1,3}\s?km/g)) {
+    erreurs.push(ou(`distance en kilomètres : « ${m[0]} » — dire la ligne, pas la distance`));
+  }
+
   // 4 — liens internes
   for (const m of html.matchAll(/href="(\/[^"#?]*)/g)) {
     let cible = m[1];
