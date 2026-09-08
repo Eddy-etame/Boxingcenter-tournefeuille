@@ -42,9 +42,9 @@ Nav (tranché) : **Plannings ↗** et **Tarifs ↗** sont des menus à deux entr
 | MARDI_028 | `salle-boxe-tournefeuille.webp` | la salle | La salle vide, sacs, ring, sol bleu et rouge |
 | MARDI_029 | `preparation-physique-tournefeuille.webp` | cross-training | Le plateau cardio sur gazon devant la fresque |
 | MARDI_041 | `salle-mma-cage-tournefeuille.webp` | cage / rack | Le rack et la cage, poids au premier plan |
-Légende des « MARDI » : « … — Boxing Center » sans nommer de salle tant que la salle de cette séance n'est pas confirmée par Eddy (murs noirs, fresque grise : Saint-Cyprien ou États-Unis ?). Portet pour /mma/ (cage 050 si non prise ailleurs), légendée « — Boxing Center Portet-sur-Garonne ».
+Légende des « MARDI » : « … — Boxing Center Saint-Cyprien » (club de destination visé par la page). Portet pour /mma/ (cage 050 si non prise ailleurs), légendée « … — Boxing Center Portet-sur-Garonne ».
 
 ## Système visuel — deux sous-familles se rencontrent : base Portet (papier chaud · encre · cuivre) ; la page /boxe-thai/ et la fiche Saint-Cyprien portent l'accent Saint-Cyprien — texte graphite `#3b3f47` (9,1:1 sur `#eeeeea`, mesuré), aplats vert de fresque `#9db83f` (loi commune §7). Le moteur affiche la couleur du club résolu.
 
 ## Concurrence : « club de boxe Tournefeuille », « MMA Tournefeuille », « boxe thaï Tournefeuille » + Fonsorbes, Plaisance-du-Touch.
-## Bloquants : la salle de la séance « MARDI » (question posée à Eddy).
+## Bloquants : aucun.
