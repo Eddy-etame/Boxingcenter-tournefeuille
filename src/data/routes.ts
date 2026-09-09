@@ -76,7 +76,7 @@ export const ROUTES: readonly Route[] = [
     chemin: '/boxe-thai/',
     nav: 'Boxe thaï',
     question: 'Où faire de la boxe thaï ou du K1 quand on part de Tournefeuille ?',
-    titre: 'Boxe thaï et K1 près de Tournefeuille | Boxing Center',
+    titre: 'Boxe thaï, pieds-poings près de Tournefeuille | Boxing Center',
     description:
       'La Boxe Thaï / K1 se pratique à Boxing Center Saint-Cyprien, à quatre minutes du métro A. Depuis Tournefeuille, le Linéo L3 rejoint les Arènes puis la ligne A.',
     menu: true,

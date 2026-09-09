@@ -234,17 +234,18 @@ export const GET: APIRoute = async ({ params }) => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'flex-end',
+          gap: 32,
           paddingTop: 18,
           borderTop: `2px solid ${T.trait}`,
           fontFamily: MONO,
-          fontSize: 17,
+          fontSize: 15,
           letterSpacing: 0.5,
           color: T.graphite,
         },
       },
       h(
         'div',
-        { style: { display: 'flex', flexDirection: 'column', gap: 6 } },
+        { style: { display: 'flex', flexDirection: 'column', gap: 6, flexShrink: 1 } },
         ...CLUBS.map((c) =>
           h(
             'div',
@@ -254,7 +255,7 @@ export const GET: APIRoute = async ({ params }) => {
           )
         )
       ),
-      h('span', { style: { color: T.signalTexte, fontWeight: 700 } }, domaine)
+      h('span', { style: { color: T.signalTexte, fontWeight: 700, whiteSpace: 'nowrap', flexShrink: 0 } }, domaine)
     )
   );
 

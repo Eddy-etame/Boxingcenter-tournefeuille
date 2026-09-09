@@ -96,7 +96,7 @@ export const CONTENUS: readonly Contenu[] = [
   },
   {
     id: 'boxe-thai',
-    h1: 'Boxe thaï, K1 et kick-boxing près de Tournefeuille',
+    h1: 'Club de boxe thaï et de kick-boxing près de Tournefeuille',
     chapeau:
       'La Boxe Thaï / K1 est publiée par Boxing Center Saint-Cyprien, qui la présente comme sa discipline la plus complète : poings, jambes, genoux. Depuis Tournefeuille, le Linéo L3 descend aux Arènes et le métro A dépose à quatre minutes du club. Le kick-boxing se pratique aussi à Portet.',
     photoHero: 'boxe-thai-tournefeuille',
