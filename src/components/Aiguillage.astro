@@ -1,0 +1,365 @@
+---
+/**
+ * L'AIGUILLAGE — le dessin du choix, sous le titre qu'il illustre.
+ *
+ * Tournefeuille est le seul site du réseau à viser deux clubs. Le dessin dit
+ * exactement ça : une route qui part de la ville, un aiguillage, et deux
+ * branches. Celle du haut monte vers Saint-Cyprien en métro ; celle du bas
+ * descend vers Portet en bus. L'aiguillage porte son vrai nom : la discipline.
+ *
+ * Il vit dans la section « Lequel des deux », sous le titre qui énonce la
+ * règle — dans le héros, il coûtait presque un écran avant le premier mot sur
+ * les clubs. Sur téléphone, le tracé vertical tient en un demi-écran.
+ *
+ * La branche que le moteur a retenue s'allume. Tant que le visiteur n'a rien
+ * décidé, les deux restent au trait : le site ne choisit pas à sa place.
+ *
+ * Chaque étiquette vient du registre : les noms, les lignes, les signatures.
+ * Tout est en SVG inline — aucun canvas, aucune bibliothèque, aucune requête.
+ * Sans JavaScript et en mouvement réduit, le plan est déjà à son état final.
+ */
+import { SITE, CLUBS, type Club } from '../data/verite';
+import { itineraireDuClub, enLettres, type Etape } from '../data/transports';
+
+const [SC, PT] = CLUBS;
+
+const fait = (c: Club, cle: string) => c.faits.find((f) => f.cle === cle)?.valeur ?? '';
+
+/** « Linéo L3, puis métro A » — écrit depuis les étapes, jamais tapé. */
+const nomLigne = (e: Etape, premier: boolean) => {
+  if (e.mode === 'metro') return `métro ${e.code}`;
+  if (/^L\d/.test(e.code)) return `Linéo ${e.code}`;
+  return premier ? `bus ${e.code}` : e.code;
+};
+const trajetLong = (c: Club) => {
+  const it = itineraireDuClub(c.id);
+  if (!it) return '';
+  const [a, ...reste] = it.etapes;
+  const t = [nomLigne(a, true), ...reste.map((e) => nomLigne(e, false))].join(', puis ');
+  return t.charAt(0).toUpperCase() + t.slice(1);
+};
+const trajetCourt = (c: Club) =>
+  itineraireDuClub(c.id)
+    ?.etapes.map((e) => (e.mode === 'metro' ? `métro ${e.code}` : e.code))
+    .join(' + ') ?? '';
+
+const VERS_SC = trajetLong(SC);
+const VERS_PT = trajetLong(PT);
+---
+
+<figure class="plan" data-plan>
+  <figcaption class="vh">
+    Depuis {SITE.ville} ({SITE.codePostal}), {enLettres(CLUBS.length)} clubs Boxing Center.
+    {SC.nom}, {SC.adresse} : {VERS_SC}. {SC.singularite}
+    {PT.nom}, {PT.adresse} : {VERS_PT}. {PT.singularite}
+  </figcaption>
+
+  {/* ── Tracé horizontal — écrans larges ── */}
+  <svg
+    class="plan__svg plan__svg--h"
+    viewBox="0 0 1200 440"
+    role="img"
+    aria-hidden="true"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <path class="plan__trait" d="M 180 240 H 560" fill="none" />
+    <path class="plan__trait" d="M 560 240 L 1010 130" fill="none" />
+    <path class="plan__trait" d="M 560 240 L 1010 360" fill="none" />
+
+    <path class="plan__tronc" d="M 180 240 H 560" fill="none" pathLength="100" />
+    <path class="plan__branche plan__branche--saint-cyprien" d="M 560 240 L 1010 130" fill="none" pathLength="100" />
+    <path class="plan__branche plan__branche--portet" d="M 560 240 L 1010 360" fill="none" pathLength="100" />
+
+    <g class="plan__cote" style="--rang:1">
+      <path class="plan__cote-ligne" d="M 790 185 V 108" />
+      <path class="plan__cote-tick" d="M 782 108 H 798" />
+      <text class="plan__cote-texte" x="790" y="92" text-anchor="middle">{VERS_SC}</text>
+    </g>
+    <g class="plan__cote" style="--rang:2">
+      <path class="plan__cote-ligne" d="M 790 300 V 378" />
+      <path class="plan__cote-tick" d="M 782 378 H 798" />
+      <text class="plan__cote-texte" x="790" y="400" text-anchor="middle">{VERS_PT}</text>
+    </g>
+
+    <g class="plan__aiguillage">
+      <circle class="plan__aiguillage-rond" cx="560" cy="240" r="13" />
+      <path class="plan__aiguillage-croix" d="M 560 220 V 260 M 540 240 H 580" />
+      <text class="plan__aiguillage-nom" x="560" y="292" text-anchor="middle">TA DISCIPLINE</text>
+    </g>
+
+    <g class="plan__noeud plan__noeud--origine">
+      <circle cx="180" cy="240" r="7" />
+      <text class="plan__noeud-nom" x="180" y="272" text-anchor="middle">{SITE.ville.toUpperCase()}</text>
+      <text class="plan__noeud-cp" x="180" y="290" text-anchor="middle">{SITE.codePostal}</text>
+    </g>
+
+    <g class="plan__noeud plan__noeud--fin plan__noeud--saint-cyprien">
+      <circle class="plan__cible" cx="1010" cy="130" r="15" />
+      <circle cx="1010" cy="130" r="6" />
+      <text class="plan__noeud-nom" x="1010" y="98" text-anchor="middle">{SC.nomCourt.toUpperCase()}</text>
+      <text class="plan__noeud-cp" x="1010" y="172" text-anchor="middle">{fait(SC, 'Signature')}</text>
+    </g>
+    <g class="plan__noeud plan__noeud--fin plan__noeud--portet">
+      <circle class="plan__cible" cx="1010" cy="360" r="15" />
+      <circle cx="1010" cy="360" r="6" />
+      <text class="plan__noeud-nom" x="1010" y="402" text-anchor="middle">{PT.nomCourt.toUpperCase()}</text>
+      <text class="plan__noeud-cp" x="1010" y="420" text-anchor="middle">{fait(PT, 'Signature')}</text>
+    </g>
+  </svg>
+
+  {/* ── Tracé vertical — téléphones ── */}
+  <svg
+    class="plan__svg plan__svg--v"
+    viewBox="0 0 360 620"
+    role="img"
+    aria-hidden="true"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <path class="plan__trait" d="M 180 96 V 290" fill="none" />
+    <path class="plan__trait" d="M 180 290 L 84 470" fill="none" />
+    <path class="plan__trait" d="M 180 290 L 276 470" fill="none" />
+
+    <path class="plan__tronc" d="M 180 96 V 290" fill="none" pathLength="100" />
+    <path class="plan__branche plan__branche--saint-cyprien" d="M 180 290 L 84 470" fill="none" pathLength="100" />
+    <path class="plan__branche plan__branche--portet" d="M 180 290 L 276 470" fill="none" pathLength="100" />
+
+    <g class="plan__cote" style="--rang:1">
+      <path class="plan__cote-ligne" d="M 132 380 H 44" />
+      <path class="plan__cote-tick" d="M 44 372 V 388" />
+      <text class="plan__cote-texte" x="40" y="362" text-anchor="start">{trajetCourt(SC)}</text>
+    </g>
+    <g class="plan__cote" style="--rang:2">
+      <path class="plan__cote-ligne" d="M 228 380 H 316" />
+      <path class="plan__cote-tick" d="M 316 372 V 388" />
+      <text class="plan__cote-texte" x="320" y="362" text-anchor="end">{trajetCourt(PT)}</text>
+    </g>
+
+    <g class="plan__aiguillage">
+      <circle class="plan__aiguillage-rond" cx="180" cy="290" r="13" />
+      <path class="plan__aiguillage-croix" d="M 180 270 V 310 M 160 290 H 200" />
+      <text class="plan__aiguillage-nom" x="180" y="256" text-anchor="middle">TA DISCIPLINE</text>
+    </g>
+
+    <g class="plan__noeud plan__noeud--origine">
+      <circle cx="180" cy="96" r="7" />
+      <text class="plan__noeud-nom" x="180" y="66" text-anchor="middle">{SITE.ville.toUpperCase()}</text>
+      <text class="plan__noeud-cp" x="180" y="46" text-anchor="middle">{SITE.codePostal}</text>
+    </g>
+
+    <g class="plan__noeud plan__noeud--fin plan__noeud--saint-cyprien">
+      <circle class="plan__cible" cx="84" cy="470" r="14" />
+      <circle cx="84" cy="470" r="6" />
+      <text class="plan__noeud-nom" x="84" y="510" text-anchor="middle">{SC.nomCourt.toUpperCase()}</text>
+      <text class="plan__noeud-cp" x="84" y="528" text-anchor="middle">{fait(SC, 'Signature')}</text>
+    </g>
+    <g class="plan__noeud plan__noeud--fin plan__noeud--portet">
+      <circle class="plan__cible" cx="276" cy="470" r="14" />
+      <circle cx="276" cy="470" r="6" />
+      <text class="plan__noeud-nom" x="276" y="510" text-anchor="middle">{PT.ville.split('-')[0].toUpperCase()}</text>
+      <text class="plan__noeud-cp" x="276" y="528" text-anchor="middle">{fait(PT, 'Signature')}</text>
+    </g>
+  </svg>
+
+  <p class="plan__bloc mono">
+    <span><b>{SITE.ville}</b> → {enLettres(CLUBS.length)} clubs</span>
+    <span>{SC.adresse}</span>
+    <span>{PT.adresse}</span>
+  </p>
+</figure>
+
+<style>
+  .plan { position: relative; margin: 0; }
+  .plan__svg { width: 100%; height: auto; overflow: visible; }
+  .plan__svg--v { display: none; }
+  @media (max-width: 48rem) {
+    .plan__svg--h { display: none; }
+    /* Un demi-écran de téléphone : on voit l'aiguillage et les deux clubs
+       d'un coup, et le titre reste au-dessus. */
+    .plan__svg--v { display: block; max-width: 17rem; margin-inline: auto; }
+  }
+
+  .plan__trait {
+    stroke: var(--graphite);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    opacity: 0.45;
+  }
+
+  /* Le tronc se trace toujours : il est acquis avant toute décision. */
+  .plan__tronc {
+    stroke: var(--signal-texte);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+    fill: none;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: tracer 900ms var(--e-resolution) 200ms forwards;
+  }
+  @keyframes tracer { to { stroke-dashoffset: 0; } }
+
+  /* Les branches attendent. Celle du club retenu s'allume, l'autre s'estompe. */
+  .plan__branche {
+    stroke: var(--signal-texte);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+    fill: none;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    opacity: 0.55;
+    transition:
+      stroke-dashoffset var(--d-trace) var(--e-resolution),
+      opacity var(--d-normal) var(--e-sortie);
+    animation: tracer 900ms var(--e-resolution) 900ms forwards;
+  }
+  .plan[data-club='saint-cyprien'] .plan__branche--portet,
+  .plan[data-club='portet'] .plan__branche--saint-cyprien { opacity: 0.14; }
+  .plan[data-club='saint-cyprien'] .plan__branche--saint-cyprien,
+  .plan[data-club='portet'] .plan__branche--portet { opacity: 1; stroke-width: 3; }
+
+  .plan__noeud--fin { transition: opacity var(--d-normal) var(--e-sortie); }
+  .plan[data-club='saint-cyprien'] .plan__noeud--portet,
+  .plan[data-club='portet'] .plan__noeud--saint-cyprien { opacity: 0.3; }
+
+  .plan__cote {
+    opacity: 0;
+    animation: apparaitre 420ms var(--e-sortie) forwards;
+    animation-delay: calc(1500ms + var(--rang) * 130ms);
+  }
+  @keyframes apparaitre { to { opacity: 1; } }
+
+  .plan__cote-ligne,
+  .plan__cote-tick {
+    stroke: var(--graphite);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    fill: none;
+    opacity: 0.7;
+  }
+  .plan__cote-ligne { stroke-dasharray: 4 4; }
+  .plan__cote-texte {
+    font-family: var(--police-mono);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    fill: var(--signal-texte);
+  }
+
+  /* L'aiguillage : le point où la question se tranche. */
+  .plan__aiguillage {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: poser-aiguillage 520ms var(--e-mecanique) 1200ms forwards;
+  }
+  @keyframes poser-aiguillage {
+    from { opacity: 0; transform: scale(1.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .plan__aiguillage-rond {
+    fill: var(--papier);
+    stroke: var(--encre);
+    stroke-width: 1.4;
+    vector-effect: non-scaling-stroke;
+  }
+  .plan__aiguillage-croix {
+    stroke: var(--encre);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    fill: none;
+    opacity: 0.75;
+  }
+  .plan__aiguillage-nom {
+    font-family: var(--police-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    fill: var(--graphite);
+  }
+
+  .plan__noeud circle { fill: var(--encre); }
+  .plan__noeud {
+    opacity: 0;
+    animation: apparaitre 380ms var(--e-sortie) forwards;
+  }
+  .plan__noeud--origine { animation-delay: 900ms; }
+  .plan__noeud--fin { animation-delay: 1700ms; }
+
+  .plan__cible {
+    fill: none;
+    stroke: var(--signal-texte);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: viser 2.6s var(--e-mecanique) 2s infinite;
+  }
+  @keyframes viser {
+    0%, 72%, 100% { transform: scale(1); opacity: 1; }
+    84% { transform: scale(1.28); opacity: 0.35; }
+  }
+  .plan__noeud--fin circle:last-of-type { fill: var(--signal-texte); }
+
+  .plan__noeud-nom {
+    font-family: var(--police-mono);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    fill: var(--encre);
+  }
+  .plan__noeud-cp {
+    font-family: var(--police-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    fill: var(--graphite);
+  }
+
+  .plan__bloc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-2) var(--e-5);
+    margin-top: var(--e-5);
+    padding-top: var(--e-3);
+    border-top: 1px solid var(--trait);
+    text-transform: none;
+    letter-spacing: 0.05em;
+    color: var(--graphite);
+  }
+  .plan__bloc b { color: var(--encre); font-weight: 700; }
+  .plan__bloc span:nth-child(2) { margin-left: auto; }
+  @media (max-width: 62rem) { .plan__bloc span:nth-child(2) { margin-left: 0; } }
+
+  /* ── Sans script, et en mouvement réduit : le plan est déjà fini. ──── */
+  :global(.no-js) .plan__cote,
+  :global(.no-js) .plan__noeud,
+  :global(.no-js) .plan__aiguillage { animation: none; opacity: 1; }
+  :global(.no-js) .plan__aiguillage { transform: none; }
+  :global(.no-js) .plan__tronc,
+  :global(.no-js) .plan__branche { stroke-dashoffset: 0; animation: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .plan__cote,
+    .plan__noeud,
+    .plan__aiguillage,
+    .plan__cible { animation: none !important; opacity: 1; }
+    .plan__aiguillage { transform: none; }
+    .plan__tronc,
+    .plan__branche { stroke-dashoffset: 0; animation: none; }
+  }
+</style>
+
+<script>
+  /**
+   * La branche du club retenu s'allume. Le club vient du moteur, jamais d'ici :
+   * on ne fait que lire l'attribut que la barre de parcours porte déjà.
+   */
+  const plan = document.querySelector<HTMLElement>('[data-plan]');
+  if (plan) {
+    const suivre = () => {
+      const barre = document.querySelector<HTMLElement>('[data-parcours]');
+      const club = barre?.dataset.club ?? '';
+      if (club) plan.dataset.club = club;
+      else delete plan.dataset.club;
+    };
+    document.addEventListener('parcours:maj', suivre);
+    suivre();
+  }
+</script>

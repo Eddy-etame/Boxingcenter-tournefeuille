@@ -17,14 +17,15 @@
  * au lecteur d'écran et sans JavaScript, la section reste entièrement utile :
  * elle affiche alors les deux fiches de club et tous les intitulés publiés.
  */
-import { CLUBS } from '../data/verite';
+import { SITE, CLUBS } from '../data/verite';
 import { OFFRES } from '../data/offres';
 import { route } from '../data/routes';
 
-interface Props { titre?: string; niveau?: 'h2' | 'h1' }
+interface Props { titre?: string; niveau?: 'h2' | 'h1'; numero?: string }
 const {
   titre = 'Dis-nous deux choses. On te dit lequel viser.',
   niveau = 'h2',
+  numero = '03',
 } = Astro.props;
 
 const DISCIPLINES = [
@@ -46,16 +47,14 @@ const Titre = niveau;
 
 <section class="section moteur" id="ta-seance" aria-labelledby="t-moteur">
   <div class="enveloppe">
-    <p class="cartouche"><span class="cartouche__num">03</span><span>Ta séance</span></p>
+    <p class="cartouche"><span class="cartouche__num">{numero}</span><span>Ta séance</span></p>
 
     <div class="moteur__tete">
       <Titre id="t-moteur" class="moteur__titre" set:html={titre.replace('\n', '<br />')} />
       <p class="lead faible moteur__intro">
-        Deux clubs t’accueillent depuis Tournefeuille&nbsp;:
-        <strong>Saint-Cyprien</strong>, à quatre minutes du métro A, et
-        <strong>Portet-sur-Garonne</strong>, avec la seule cage du réseau. Dis-nous
-        <strong>quoi</strong> et <strong>quand</strong>, et le graphe des disciplines
-        tranche tout seul.
+        Deux clubs t’accueillent à proximité de {SITE.ville}. Coche
+        <strong>ce que tu veux pratiquer</strong> et <strong>le moment où tu peux
+        venir</strong>&nbsp;: le club s’affiche, avec ses intitulés et son planning.
       </p>
     </div>
 
@@ -134,7 +133,7 @@ const Titre = niveau;
                 <span class="fleche" aria-hidden="true">↗</span>
               </a>
               <a class="bouton" href={c.tarifs} rel="noopener">
-                <span>Les tarifs</span>
+                <span>Les tarifs de {c.nomCourt}</span>
                 <span class="fleche" aria-hidden="true">↗</span>
               </a>
             </div>

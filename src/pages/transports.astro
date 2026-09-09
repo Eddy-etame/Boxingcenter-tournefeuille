@@ -1,6 +1,6 @@
 ---
 /**
- * TRANSPORTS EN COMMUN — le trajet complet, de Cugnaux au 61 route d'Espagne.
+ * TRANSPORTS EN COMMUN — le trajet complet, de Tournefeuille aux deux clubs.
  *
  * Le corps vit dans `components/Transports.astro`, piloté par
  * `data/transports.ts` : les autres sites de la famille changent leur registre
@@ -8,33 +8,33 @@
  */
 import Base from '../layouts/Base.astro';
 import Transports from '../components/Transports.astro';
-import { SITE, DESTINATION } from '../data/verite';
+import { SITE, CLUBS } from '../data/verite';
+import { itineraire } from '../data/transports';
+
+const [SC, PT] = CLUBS;
+const VERS_SC = itineraire('metro');
+const VERS_PT = itineraire('portet');
 
 const QUESTIONS = [
   {
-    titre: `Quel bus va de ${SITE.ville} à ${DESTINATION.ville} ?`,
-    texte:
-      'La 85, qui traverse Cugnaux et finit son parcours à Portet Gare SNCF. Sur le parvis, la Linéo 5 repart et dessert l’arrêt « Route d’Espagne » : Boxing Center Portet-sur-Garonne est au 61 de cette rue. La 85 roule du lundi au samedi, la L5 sept jours sur sept.',
+    titre: `Comment aller de ${SITE.ville} à ${SC.nomCourt} sans voiture ?`,
+    texte: `Le Linéo ${VERS_SC.etapes[0].code} traverse ${SITE.ville} et finit aux ${VERS_SC.etapes[0].a} ; le métro ${VERS_SC.etapes[1].code} y démarre et s’arrête à ${VERS_SC.etapes[1].a}, ${VERS_SC.etapes[1].precision.split(',')[0]} plus loin. ${SC.nom} est au ${SC.adresse.split(',')[0]}, ${VERS_SC.etapes[1].precision.split(', puis ')[1] ?? 'à pied'}. Les deux lignes roulent tous les jours.`,
   },
   {
-    titre: 'Où se fait la correspondance ?',
-    texte:
-      'À Portet Gare SNCF. C’est le terminus de la 85 et de la 321, et le départ de la Linéo 5 : les deux bus se prennent sur le même parvis.',
+    titre: `Et pour le MMA, à ${PT.nomCourt} ?`,
+    texte: `La ${VERS_PT.etapes[0].code} part de ${VERS_PT.etapes[0].de} et finit à ${VERS_PT.etapes[0].a}, ${VERS_PT.etapes[0].precision}. La ${VERS_PT.etapes[1].code} y repart vers ${PT.ville} et s’arrête à « ${VERS_PT.etapes[1].a} », ${VERS_PT.etapes[1].precision} : le club est au ${PT.adresse.split(',')[0]}.`,
   },
   {
-    titre: 'Et la 321 ?',
-    texte:
-      'Elle part de Frouzins Tréville, marque l’arrêt « Mairie Cugnaux » et rejoint Portet Gare SNCF en dix-neuf arrêts, du lundi au vendredi. La Linéo 5 prend le relais jusqu’à la route d’Espagne.',
+    titre: 'Où se font les correspondances ?',
+    texte: `Aux ${VERS_SC.etapes[0].a} pour ${SC.nomCourt} : le terminus du Linéo ${VERS_SC.etapes[0].code}, et une station du métro ${VERS_SC.etapes[1].code}. À ${VERS_PT.etapes[0].a} pour ${PT.nomCourt} : le terminus de la ${VERS_PT.etapes[0].code}, et le départ de la ${VERS_PT.etapes[1].code}.`,
   },
   {
-    titre: 'Je pars de Villeneuve-Tolosane ou de Frouzins.',
-    texte:
-      'La 85 marque l’arrêt « Mairie Villeneuve Tolosane » ; la 321 part de Frouzins Tréville. Les deux finissent à Portet Gare SNCF, où la L5 prend le relais jusqu’au club. Même correspondance, même arrivée.',
+    titre: 'Je pars de Plaisance-du-Touch ou de Fonsorbes.',
+    texte: `Le Linéo ${VERS_SC.etapes[0].code} démarre à Plaisance Monestié : depuis Plaisance-du-Touch, tu fais la ligne en entier jusqu’aux ${VERS_SC.etapes[0].a}. Depuis Fonsorbes, la ligne 116 rejoint ${SITE.ville}, où le ${VERS_SC.etapes[0].code} prend le relais. Chaque commune a sa page ici, avec sa route et ses bus.`,
   },
   {
-    titre: 'Le samedi, quand le club est ouvert ?',
-    texte:
-      'La 85 roule du lundi au samedi et la Linéo 5 sept jours sur sept : le trajet du samedi se fait exactement comme celui de la semaine. Les horaires exacts sont publiés par Tisséo.',
+    titre: 'Le samedi, quand les clubs sont ouverts ?',
+    texte: `Le Linéo ${VERS_SC.etapes[0].code} et le métro ${VERS_SC.etapes[1].code} roulent ${VERS_SC.etapes[0].jours} ; la ${VERS_PT.etapes[0].code} roule ${VERS_PT.etapes[0].jours} et la ${VERS_PT.etapes[1].code} ${VERS_PT.etapes[1].jours}. Les horaires exacts sont publiés par Tisséo.`,
   },
 ];
 ---

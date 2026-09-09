@@ -175,3 +175,10 @@ export const DEPARTS: readonly Depart[] = [
 
 export const AVERTISSEMENT =
   'Tisséo publie les horaires, les fréquences et les arrêts, et les met à jour à chaque saison. Cette page te dit quelles lignes prendre ; Tisséo te dit à quelle heure elles passent.';
+
+/** Les nombres en lettres, pour les décomptes qui viennent du registre. */
+export const NOMBRES = [
+  'zéro', 'un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix',
+  'onze', 'douze', 'treize', 'quatorze', 'quinze', 'seize', 'dix-sept', 'dix-huit', 'dix-neuf', 'vingt',
+] as const;
+export const enLettres = (n: number) => NOMBRES[n] ?? String(n);

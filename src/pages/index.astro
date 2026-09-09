@@ -1,62 +1,117 @@
 ---
+/**
+ * L'ACCUEIL — dans l'ordre des questions d'un Tournefeuillais.
+ *
+ * Ce site vise deux clubs, et c'est sa seule vraie question : lequel. La page
+ * est donc une démonstration, pas une vitrine : la thèse (le héros), la règle
+ * avec ses deux pièces (02), le reste du planning et le tableau où la colonne
+ * vide désigne le club (03), la preuve interactive (04), le trajet — qui EST
+ * le choix de club (05), le premier jour, le même quelle que soit la branche
+ * (06), le cas par cas (07), la règle tenue depuis les communes voisines (08),
+ * et la conclusion : réserver dans le club de sa discipline (09).
+ *
+ * Aucun titre de section n'existe sur un autre site de la famille. Chaque
+ * nombre se compte depuis le registre. Chaque club est lu dans le graphe des
+ * disciplines, jamais choisi ici.
+ */
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
+import Aiguillage from '../components/Aiguillage.astro';
 import Seance from '../components/Seance.astro';
 import Photo from '../components/Photo.astro';
-import { SITE, CLUBS, VILLE, LIMITROPHES, CONTACT } from '../data/verite';
+import { SITE, CLUBS, VILLE, LIMITROPHES, NOTE_SECTEUR, type Club } from '../data/verite';
 import { COMMUNES } from '../data/communes';
-import { OFFRES } from '../data/offres';
+import {
+  OFFRES,
+  offresDeLaFamille,
+  clubsQuiProposent,
+  destinationUnique,
+  FAMILLES_PAR_PAGE,
+  type Famille,
+} from '../data/offres';
 import { ROLES } from '../data/medias';
 import { route } from '../data/routes';
-import { ITINERAIRES, MEILLEUR } from '../data/transports';
+import { ITINERAIRES, itineraireDuClub, AVERTISSEMENT, enLettres } from '../data/transports';
 
 const [SC, PT] = CLUBS;
+const [PLAISANCE, FONSORBES] = COMMUNES;
+
+/** Le club se lit dans le graphe, jamais dans une préférence. */
+const CLUB_THAI = CLUBS.find((c) => c.id === destinationUnique('thai')) ?? SC;
+const CLUB_MMA = CLUBS.find((c) => c.id === destinationUnique('mma')) ?? PT;
+
+const VERS_SC = itineraireDuClub(SC.id) ?? ITINERAIRES[0];
+const VERS_PT = itineraireDuClub(PT.id) ?? ITINERAIRES[1];
+const dernier = (it: typeof VERS_SC) => it.etapes[it.etapes.length - 1];
+
+/** Les familles, dans l'ordre où on les cherche, leur nom, et le mot court du titre. */
+const FAMILLES: readonly { id: Famille; nom: string; court: string }[] = [
+  { id: 'boxe-anglaise', nom: 'Boxe anglaise', court: 'boxe anglaise' },
+  { id: 'thai', nom: 'Boxe thaï / K1', court: 'boxe thaï' },
+  { id: 'kick-boxing', nom: 'Kick-boxing', court: 'kick-boxing' },
+  { id: 'mma', nom: 'MMA', court: 'MMA' },
+  { id: 'grappling', nom: 'Grappling & JJB', court: 'grappling' },
+  { id: 'sparring', nom: 'Open Sparring', court: 'sparring' },
+  { id: 'femme', nom: 'Entre femmes', court: 'entre femmes' },
+  { id: 'physique', nom: 'Préparation physique', court: 'préparation physique' },
+  { id: 'enfants', nom: 'Enfants et ados', court: 'enfants' },
+];
+type PageDiscipline = keyof typeof FAMILLES_PAR_PAGE;
+const pageDe = (f: Famille) =>
+  (Object.keys(FAMILLES_PAR_PAGE) as PageDiscipline[]).find((p) =>
+    (FAMILLES_PAR_PAGE[p] as readonly Famille[]).includes(f)
+  );
+const intitules = (f: Famille, c: Club) =>
+  offresDeLaFamille(f)
+    .filter((o) => o.club === c.id)
+    .map((o) => o.intitule);
+const enumerer = (mots: string[]) =>
+  mots.length > 1 ? `${mots.slice(0, -1).join(', ')} et ${mots[mots.length - 1]}` : mots[0] ?? '';
+const majuscule = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+const minuscule = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
+
+/** Les familles que les deux clubs publient : le titre de 03 s'écrit avec elles. */
+const PARTAGEES = enumerer(
+  FAMILLES.filter((f) => clubsQuiProposent(f.id).length === CLUBS.length).map((f) => f.court)
+);
+
+const MMA = OFFRES.find((o) => o.famille === 'mma');
+const GRAPPLING = OFFRES.find((o) => o.famille === 'grappling');
+const FEMME_SC = intitules('femme', SC)[0];
+const FEMME_PT = intitules('femme', PT)[0];
 
 /**
- * Les questions telles qu'on les pose, avec des réponses courtes. Aucune n'est
- * là pour placer un mot-clé : chacune répond à quelque chose qu'on nous
- * demande vraiment.
+ * Le cas par cas. Chaque réponse s'ouvre sur un fait et finit par le nom d'un
+ * club — la preuve, sous forme d'intitulés cités mot pour mot.
  */
 const QUESTIONS = [
   {
-    titre: 'Où est le club de boxe le plus proche de Tournefeuille ?',
-    texte:
-      'Il y en a deux. Boxing Center Saint-Cyprien, au 11 rue Sainte-Lucie à Toulouse, à quatre minutes du métro A. Et Boxing Center Portet-sur-Garonne, au 61 route d’Espagne. Le premier se rejoint en Linéo L3 puis métro ; le second en voiture par la rocade, ou en bus.',
+    titre: `Où est le club de boxe le plus proche de ${SITE.ville} ?`,
+    texte: `Il y en a deux, et ta discipline désigne le tien. ${SC.nom}, ${SC.adresse} : le Linéo ${VERS_SC.etapes[0].code} puis le métro ${VERS_SC.etapes[1].code}. ${PT.nom}, ${PT.adresse} : la ${VERS_PT.etapes[0].code} puis la ${VERS_PT.etapes[1].code}, ou la rocade et l’A64.`,
   },
   {
-    titre: 'Lequel des deux choisir ?',
-    texte:
-      'Ce que tu cherches décide. La boxe thaï, le K1, l’Open Sparring et le cross-training sont à Saint-Cyprien. Le MMA en cage et le grappling sont à Portet. La boxe anglaise, les cours entre femmes et les cours enfants existent dans les deux.',
+    titre: `Où faire de la boxe thaï près de ${SITE.ville} ?`,
+    texte: `À ${CLUB_THAI.nom}, ${CLUB_THAI.adresse}. ${CLUB_THAI.singularite}`,
   },
   {
-    titre: 'Où faire de la boxe thaï ?',
-    texte:
-      'À Saint-Cyprien, qui publie la Boxe Thaï / K1 et la présente comme sa discipline la plus complète : poings, jambes, genoux. C’est le seul club du réseau à la proposer.',
+    titre: 'Il y a une vraie cage pour le MMA ?',
+    texte: `Oui, à ${CLUB_MMA.nomCourt}. ${MMA?.intitule} : ${minuscule(MMA?.detail ?? '')} ${GRAPPLING?.intitule} : ${minuscule(GRAPPLING?.detail ?? '')}`,
   },
   {
-    titre: 'Et le MMA, il y a une vraie cage ?',
-    texte:
-      'Oui, à Portet-sur-Garonne, et l’entraînement se fait dedans. Le grappling et le jiu-jitsu brésilien y sont des cours à part, sans aucune frappe.',
-  },
-  {
-    titre: 'Je n’ai jamais fait de sport de combat. Je peux venir ?',
-    texte:
-      'Oui, c’est le cas de la plupart des gens qui s’inscrivent. Pas de test à l’entrée, pas de niveau demandé. Une première séance, c’est de l’échauffement, un geste travaillé lentement, du sac et des pattes d’ours. Tu frappes, personne ne te frappe.',
-  },
-  {
-    titre: 'Comment y aller sans voiture ?',
-    texte:
-      'Le Linéo L3 traverse Tournefeuille sur douze arrêts et finit aux Arènes. Le métro A y démarre et s’arrête deux stations plus loin, à Saint-Cyprien – République. Pour Portet, la 48 rejoint Basso Cambo et la 117 Express repart vers la route d’Espagne.',
+    titre: 'Je débute complètement. Je peux venir ?',
+    texte: `Oui, c’est le cas de la plupart des inscrits. La première séance se déroule de la même façon dans les deux clubs : de la corde, un geste décomposé lentement, le sac et les pattes d’ours. Elle se réserve sur le site de ${SC.nomCourt} ou sur celui de ${PT.nomCourt}.`,
   },
   {
     titre: 'Mon enfant peut s’inscrire ?',
-    texte:
-      'Oui, dans les deux clubs. Saint-Cyprien publie la Baby Boxe le samedi et la boxe éducative le mercredi et le samedi. Portet publie la Baby boxe, la boxe éducative et le kick-boxing enfants/ados. Tout se fait en touché contrôlé.',
+    texte: `Dans les deux clubs. ${SC.nomCourt} publie ${enumerer(intitules('enfants', SC))} ; ${PT.nomCourt} publie ${enumerer(intitules('enfants', PT))}. Les âges exacts sont sur le planning de chaque club.`,
   },
   {
-    titre: 'J’habite Plaisance-du-Touch ou Fonsorbes.',
-    texte:
-      'Chaque commune a sa page ici, avec sa route et ses bus. Le Linéo L3 démarre à Plaisance Monestié ; depuis Fonsorbes, la ligne 116 rejoint Tournefeuille où la L3 prend le relais.',
+    titre: 'Je cherche un cours entre femmes.',
+    texte: `${FEMME_SC} à ${SC.nomCourt}, ${FEMME_PT} à ${PT.nomCourt}. En Linéo et en métro, c’est ${SC.nomCourt} ; en voiture par la rocade, ${PT.nomCourt}.`,
+  },
+  {
+    titre: 'Comment y aller sans voiture ?',
+    texte: `${NOTE_SECTEUR} Pour ${PT.nomCourt}, la ${VERS_PT.etapes[0].code} rejoint ${VERS_PT.etapes[0].a}, où la ${VERS_PT.etapes[1].code} repart vers ${PT.ville} et s’arrête à « ${dernier(VERS_PT).a} ».`,
   },
 ];
 ---
@@ -64,119 +119,204 @@ const QUESTIONS = [
 <Base page="accueil" faq={QUESTIONS}>
   <Hero />
 
-  {/* ─────────── 02 — LES DEUX CLUBS ─────────── */}
-  <section class="section clubs" aria-labelledby="t-clubs">
+  {/* ─────────── 02 — LA RÈGLE ─────────── */}
+  <section class="section regle" id="regle" aria-labelledby="t-regle">
     <div class="enveloppe">
-      <p class="cartouche"><span class="cartouche__num">02</span><span>Les deux clubs</span></p>
-      <div class="clubs__tete">
-        <h2 id="t-clubs">
-          Deux salles,<br />
-          <span class="clubs__accent">et pas les mêmes cours.</span>
+      <p class="cartouche"><span class="cartouche__num">02</span><span>Lequel des deux</span></p>
+      <div class="regle__tete">
+        <h2 id="t-regle">
+          La boxe thaï est à {CLUB_THAI.nomCourt}.<br />
+          <span class="regle__accent">Le MMA en cage est à {CLUB_MMA.nomCourt}.</span>
         </h2>
         <p class="lead faible">
-          C’est ce qui rend le choix simple : chaque club publie sa propre liste.
-          Tu regardes ce que tu cherches, et tu sais où aller.
+          Si tu cherches un club de boxe proche de {SITE.ville}, Boxing Center en a deux.
+          La discipline désigne le club, parce que chacun publie sa propre liste de
+          cours&nbsp;: tu regardes ce que tu cherches, et tu sais où aller.
         </p>
       </div>
 
-      <ul class="clubs__liste">
-        {CLUBS.map((c, i) => (
-          <li class="reveler" style={`--retard:${i * 90}ms`}>
-            <p class="mono clubs__cle">{c.nom}</p>
-            <p class="clubs__adresse">{c.adresse}</p>
-            <p class="clubs__horaires mono">{c.horairesCourt}</p>
-            <p class="clubs__angle">{c.angle}</p>
-            <div class="clubs__actions">
-              <a class="bouton bouton--signal" href={c.plannings} rel="noopener">
-                <span>Le planning</span><span class="fleche" aria-hidden="true">↗</span>
-              </a>
-              <a class="bouton" href={c.site} rel="noopener">
-                <span>Le site du club</span><span class="fleche" aria-hidden="true">↗</span>
-              </a>
-            </div>
-          </li>
-        ))}
+      <Aiguillage />
+
+      <ul class="clubs">
+        {CLUBS.map((c, i) => {
+          const it = itineraireDuClub(c.id);
+          return (
+            <li class="club reveler" style={`--retard:${i * 90}ms`} data-fiche-club={c.id}>
+              <p class="mono club__cle">{c.nom}</p>
+              <p class="club__adresse">{c.adresse}</p>
+              <p class="club__horaires mono">{c.horairesCourt}</p>
+              <p class="club__singularite">{c.singularite}</p>
+              {it && (
+                <p class="club__trajet">
+                  {it.etapes.map((e, j) => (
+                    <>
+                      {j > 0 && <span class="club__puis" aria-hidden="true">→</span>}
+                      <span class={`club__code club__code--${e.mode}`}>{e.code}</span>
+                    </>
+                  ))}
+                  <span class="club__arrivee mono">{dernier(it).a}</span>
+                </p>
+              )}
+              <a class="lien club__lien" href={c.site} rel="noopener">Le site de {c.nomCourt} ↗</a>
+            </li>
+          );
+        })}
       </ul>
-
-      <Photo
-        slug={ROLES.hero}
-        sizes="100vw"
-        ratio="21 / 9"
-        legende
-        class="clubs__image"
-      />
     </div>
   </section>
 
-  {/* ─────────── 03 — LE MOTEUR ─────────── */}
-  <Seance />
-
-  {/* ─────────── 04 — TOUT CE QUI SE PRATIQUE ─────────── */}
-  <section class="section encre disciplines" aria-labelledby="t-disciplines">
+  {/* ─────────── 03 — LE RESTE DU PLANNING ─────────── */}
+  <section class="section encre cours" id="cours" aria-labelledby="t-cours">
     <div class="enveloppe">
-      <p class="cartouche"><span class="cartouche__num">04</span><span>Tout ce qui se pratique</span></p>
-      <div class="disciplines__tete">
-        <h2 id="t-disciplines">Les cours, avec les noms<br />que tu verras sur le planning.</h2>
-        <p class="lead faible disciplines__intro">
-          Les intitulés au complet, répartis entre les deux clubs. Si un nom ne
-          figure pas ici, c’est qu’il ne figure pas chez eux.
+      <p class="cartouche"><span class="cartouche__num">03</span><span>Le reste du planning</span></p>
+      <div class="cours__tete">
+        <h2 id="t-cours">
+          {majuscule(PARTAGEES)}&nbsp;:<br />
+          <span class="cours__accent">dans les deux clubs.</span>
+        </h2>
+        <p class="lead faible">
+          Pour ces cours-là, le trajet décide&nbsp;: en Linéo et en métro, {SC.nomCourt}&nbsp;;
+          en voiture, par la rocade ouest et l’A64, {PT.nomCourt}. Les sports de combat à
+          proximité de {SITE.ville} tiennent dans un tableau&nbsp;: {enLettres(OFFRES.length)} intitulés,
+          mot pour mot, dans la colonne du club qui les publie.
         </p>
       </div>
 
-      {CLUBS.map((c) => (
-        <div class="disciplines__club">
-          <p class="mono disciplines__cle">{c.nom}</p>
-          <ol class="disciplines__liste">
-            {OFFRES.filter((o) => o.club === c.id).map((o, i) => (
-              <li class="reveler" style={`--retard:${i * 40}ms`}>
-                <span class="mono disc__num">{String(i + 1).padStart(2, '0')}</span>
-                <div class="disc__corps">
-                  <h3 class="disc__nom">{o.intitule}</h3>
-                  <p class="disc__detail">{o.detail}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-          <p class="disciplines__source mono">
-            <a class="lien" href={c.activites} rel="noopener">Toutes les activités de {c.nomCourt} ↗</a>
-          </p>
-        </div>
-      ))}
-    </div>
-  </section>
+      <div class="tableau" role="region" aria-label="Qui publie quoi" tabindex="0">
+        <table class="grille">
+          <thead>
+            <tr>
+              <th scope="col">La discipline</th>
+              {CLUBS.map((c) => <th scope="col">{c.nomCourt}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {FAMILLES.map((f, i) => {
+              const page = pageDe(f.id);
+              const unique = destinationUnique(f.id);
+              return (
+                <tr class:list={['grille__ligne reveler', unique && 'grille__ligne--unique']} style={`--retard:${i * 40}ms`}>
+                  <th scope="row">
+                    {page ? <a class="grille__page" href={route(page).chemin}>{f.nom}</a> : f.nom}
+                  </th>
+                  {CLUBS.map((c) => {
+                    const l = intitules(f.id, c);
+                    const autre = CLUBS.find((x) => x.id !== c.id) ?? c;
+                    return (
+                      <td class:list={[l.length ? 'est-publie' : 'est-vide']}>
+                        {l.length ? (
+                          l.join(' · ')
+                        ) : (
+                          <>
+                            <span aria-hidden="true">—</span>
+                            <span class="vh">voir {autre.nomCourt}</span>
+                          </>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
 
-  {/* ─────────── 05 — LA SALLE ─────────── */}
-  <section class="section preuve" aria-labelledby="t-preuve">
-    <div class="enveloppe preuve__tete">
-      <p class="cartouche"><span class="cartouche__num">05</span><span>Sur place</span></p>
-      <h2 id="t-preuve">Voilà la salle.</h2>
-      <p class="lead faible">
-        Un mur de sacs, un ring, une cage, un plateau cardio. Toutes les photos
-        de ce site ont été prises au club.
+      <p class="cours__sources mono">
+        {CLUBS.map((c, i) => (
+          <>
+            {i > 0 && <span aria-hidden="true"> · </span>}
+            <a class="lien" href={c.activites} rel="noopener">Toutes les activités de {c.nomCourt} ↗</a>
+          </>
+        ))}
       </p>
     </div>
-    <div class="enveloppe">
-      <Photo slug={ROLES.signature} sizes="100vw" ratio="16 / 9" legende class="preuve__image" />
+  </section>
+
+  {/* ─────────── 04 — LE MOTEUR ─────────── */}
+  <Seance titre={'Choisis quoi et quand.\nLe club s’affiche, avec son planning.'} numero="04" />
+
+  {/* ─────────── 05 — Y ALLER ─────────── */}
+  <section class="section trajet" id="trajet" aria-labelledby="t-trajet">
+    <div class="enveloppe trajet__inner">
+      <div class="trajet__texte">
+        <p class="cartouche"><span class="cartouche__num">05</span><span>Y aller</span></p>
+        <h2 id="t-trajet">
+          Pour {SC.nomCourt}, le {VERS_SC.etapes[0].code} puis le métro {VERS_SC.etapes[1].code}.<br />
+          <span class="trajet__accent">Pour {PT.nomCourt}, la {VERS_PT.etapes[0].code} puis la {VERS_PT.etapes[1].code}.</span>
+        </h2>
+        <p class="lead faible">
+          Les cours de boxe accessibles depuis {SITE.ville} en transports en commun sont au
+          bout de {enLettres(ITINERAIRES.length)} trajets, et chaque trajet mène à un club.
+          {' '}{NOTE_SECTEUR} La {VERS_PT.etapes[0].code} rejoint {VERS_PT.etapes[0].a}, où la
+          {' '}{VERS_PT.etapes[1].code} repart vers {PT.ville} et s’arrête à «&nbsp;{dernier(VERS_PT).a}&nbsp;».
+        </p>
+        <p class="trajet__voiture mono">
+          En voiture, pour {PT.nomCourt}&nbsp;: {minuscule(PT.acces.split('. ')[0])}.
+        </p>
+        <div class="trajet__actions">
+          <a class="bouton bouton--signal" href={route('transports').chemin}>
+            <span>Le trajet, arrêt par arrêt</span><span class="fleche" aria-hidden="true">→</span>
+          </a>
+          <a
+            class="bouton"
+            href={SC.plannings}
+            rel="noopener"
+            data-lien-club
+            data-href-saint-cyprien={SC.plannings}
+            data-href-portet={PT.plannings}
+            data-nom-saint-cyprien={SC.nomCourt}
+            data-nom-portet={PT.nomCourt}
+          >
+            <span>Le planning de <b data-nom-club>{SC.nomCourt}</b></span><span class="fleche" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="trajet__cote">
+        <ol class="trajet__lignes">
+          {ITINERAIRES.map((it, i) => {
+            const c = CLUBS.find((x) => x.id === it.club) ?? SC;
+            return (
+              <li class="reveler" style={`--retard:${i * 90}ms`} data-fiche-club={it.club}>
+                <a href={`${route('transports').chemin}?trajet=${it.id}`}>
+                  <span class={`trajet__code trajet__code--${it.etapes[0].mode}`}>{it.etapes[0].code}</span>
+                  <span class="trajet__parcours">{it.onglet}</span>
+                  <span class="mono trajet__jours">vers {c.nomCourt} · {dernier(it).a}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ol>
+        <p class="trajet__avertissement">{AVERTISSEMENT}</p>
+      </div>
     </div>
   </section>
 
-  {/* ─────────── 06 — LA PREMIÈRE SÉANCE ─────────── */}
-  <section class="section creuse premiere" aria-labelledby="t-premiere">
+  {/* ─────────── 06 — LE PREMIER JOUR ─────────── */}
+  <section class="section creuse premiere" id="premiere" aria-labelledby="t-premiere">
     <div class="enveloppe premiere__inner">
       <div class="premiere__image">
-        <Photo slug={ROLES.premiereSeance} sizes="(max-width: 62rem) 100vw, 40vw" ratio="3 / 4" />
+        <Photo slug={ROLES.premiereSeance} sizes="(max-width: 62rem) 100vw, 40vw" ratio="3 / 4" legende />
       </div>
       <div class="premiere__texte">
         <p class="cartouche"><span class="cartouche__num">06</span><span>La première fois</span></p>
-        <h2 id="t-premiere">Tout le monde a commencé par une première séance.</h2>
+        <h2 id="t-premiere">
+          Ton premier jour&nbsp;: une tenue, de l’eau,<br />
+          <span class="premiere__accent">et le sac de frappe. Pareil dans les deux clubs.</span>
+        </h2>
+        <p class="lead faible premiere__intro">
+          Le premier jour dans un club de sport de combat se déroule de la même façon à
+          {' '}{SC.nomCourt} et à {PT.nomCourt}, et la plupart des inscrits ont commencé par lui.
+        </p>
         <ol class="premiere__etapes">
           <li>
             <span class="mono">01</span>
-            <p><strong>Tu apportes une tenue de sport et de l’eau.</strong> Rien de technique. Pour les gants et les bandes, demande au club en arrivant.</p>
+            <p><strong>Tu apportes une tenue de sport et de l’eau.</strong> Pour les gants et les bandes, tu demandes au club en arrivant.</p>
           </li>
           <li>
             <span class="mono">02</span>
-            <p><strong>Tu frappes, et c’est tout.</strong> Une première séance, c’est de la corde, un geste décomposé, du sac et des pattes d’ours.</p>
+            <p><strong>Tu frappes.</strong> De la corde, un geste décomposé lentement par le coach, du sac, puis les pattes d’ours.</p>
           </li>
           <li>
             <span class="mono">03</span>
@@ -187,56 +327,38 @@ const QUESTIONS = [
             <p><strong>Tu repars essoufflé, et content d’être venu.</strong> C’est le seul objectif d’une première séance.</p>
           </li>
         </ol>
-        <a class="lien premiere__lien" href={route('premiere-seance').chemin}>
-          Le déroulé complet, minute par minute →
-        </a>
-      </div>
-    </div>
-  </section>
-
-  {/* ─────────── 07 — Y ALLER ─────────── */}
-  <section class="section trajet" aria-labelledby="t-trajet">
-    <div class="enveloppe trajet__inner">
-      <div class="trajet__texte">
-        <p class="cartouche"><span class="cartouche__num">07</span><span>Y aller</span></p>
-        <h2 id="t-trajet">
-          Le L3 descend aux Arènes,<br />
-          <span class="trajet__accent">le métro fait le reste.</span>
-        </h2>
-        <p class="lead faible">{MEILLEUR.resume}</p>
-        <div class="trajet__actions">
-          <a class="bouton bouton--signal" href={route('transports').chemin}>
-            <span>Le trajet, arrêt par arrêt</span><span class="fleche" aria-hidden="true">→</span>
+        <div class="premiere__actions">
+          <a
+            class="bouton bouton--signal"
+            href={`tel:${SC.telephoneLien}`}
+            data-lien-club
+            data-href-saint-cyprien={`tel:${SC.telephoneLien}`}
+            data-href-portet={`tel:${PT.telephoneLien}`}
+            data-nom-saint-cyprien={SC.nomCourt}
+            data-nom-portet={PT.nomCourt}
+          >
+            <span>Appeler <b data-nom-club>{SC.nomCourt}</b> avant de venir</span><span class="fleche" aria-hidden="true">↗</span>
           </a>
-          <a class="bouton" href={SC.plannings} rel="noopener">
-            <span>Le planning de {SC.nomCourt}</span><span class="fleche" aria-hidden="true">↗</span>
+          <a class="lien premiere__lien" href={route('premiere-seance').chemin}>
+            Le déroulé complet, minute par minute →
           </a>
         </div>
       </div>
-
-      <ol class="trajet__lignes">
-        {ITINERAIRES.map((it, i) => (
-          <li class="reveler" style={`--retard:${i * 90}ms`}>
-            <a href={`${route('transports').chemin}?trajet=${it.id}`}>
-              <span class={`trajet__code trajet__code--${it.etapes[0].mode}`}>{it.etapes[0].code}</span>
-              <span class="trajet__parcours">{it.onglet}</span>
-              <span class="mono trajet__jours">vers {it.club === 'saint-cyprien' ? SC.nomCourt : PT.nomCourt}</span>
-            </a>
-          </li>
-        ))}
-      </ol>
     </div>
   </section>
 
-  {/* ─────────── 08 — LES QUESTIONS ─────────── */}
-  <section class="section creuse questions" aria-labelledby="t-questions">
+  {/* ─────────── 07 — CAS PAR CAS ─────────── */}
+  <section class="section questions" id="questions" aria-labelledby="t-questions">
     <div class="enveloppe questions__inner">
       <div class="questions__tete">
-        <p class="cartouche"><span class="cartouche__num">08</span><span>Ce qu’on nous demande</span></p>
-        <h2 id="t-questions">Les questions qu’on nous pose<br />le plus souvent.</h2>
+        <p class="cartouche"><span class="cartouche__num">07</span><span>Cas par cas</span></p>
+        <h2 id="t-questions">
+          Enfant, débutant, boxe thaï, en bus&nbsp;:<br />
+          <span class="questions__accent">le club à viser dans chaque cas.</span>
+        </h2>
         <p class="lead faible">
-          Les réponses sont courtes. Si la tienne n’y est pas, écris-nous&nbsp;:
-          on répond vite.
+          {majuscule(enLettres(QUESTIONS.length))} réponses courtes, et chacune finit par le
+          nom d’un club. Si la tienne manque, écris-nous&nbsp;: on répond vite.
         </p>
       </div>
       <div class="questions__liste">
@@ -253,32 +375,32 @@ const QUESTIONS = [
     </div>
   </section>
 
-  {/* ─────────── 09 — LE SECTEUR ─────────── */}
-  <section class="section secteur" aria-labelledby="t-secteur">
+  {/* ─────────── 08 — LE SECTEUR ─────────── */}
+  <section class="section creuse secteur" id="secteur" aria-labelledby="t-secteur">
     <div class="enveloppe">
-      <p class="cartouche"><span class="cartouche__num">09</span><span>Le secteur</span></p>
+      <p class="cartouche"><span class="cartouche__num">08</span><span>Le secteur</span></p>
       <div class="secteur__tete">
         <h2 id="t-secteur">
-          Tu habites une commune à côté&nbsp;?<br />
-          <span class="secteur__accent">On a prévu ça aussi.</span>
+          Depuis {PLAISANCE.nom}, le {PLAISANCE.cotes[1].valeur.split(',')[0]} démarre chez toi.<br />
+          <span class="secteur__accent">Depuis {FONSORBES.nom}, la {FONSORBES.cotes[1].valeur}.</span>
         </h2>
         <p class="lead faible secteur__intro">
-          {VILLE.population.valeur.replace(' (2023)', '')}, dans Toulouse
-          Métropole. Plaisance-du-Touch et Fonsorbes ont chacune sa page&nbsp;:
-          la ligne à prendre, la route, et le club au bout.
+          {SITE.ville}, {VILLE.statut.valeur}, touche {enumerer(LIMITROPHES.map((l) => l.nom))}.
+          {' '}{PLAISANCE.nom} et {FONSORBES.nom} ont chacune sa page&nbsp;: la ligne à prendre,
+          la route, et le club au bout.
         </p>
       </div>
 
       <ul class="secteur__pages">
-        {COMMUNES.map((c) => (
-          <li class="reveler">
+        {COMMUNES.map((c, i) => (
+          <li class="reveler" style={`--retard:${i * 90}ms`}>
             <a class="carte" href={`/${c.id}/`}>
               <span class="mono carte__cp">{c.codePostal}</span>
               <span class="carte__nom">{c.nom}</span>
               <span class="carte__trajet">
                 <span class="mono carte__ligne">{c.cotes[1].valeur}</span>
                 <span aria-hidden="true">→</span>
-                <span class="carte__club">deux clubs</span>
+                <span class="carte__club">{c.cotes[3].valeur}</span>
               </span>
               <span class="mono carte__aller">Le trajet depuis {c.nom} <span aria-hidden="true">→</span></span>
             </a>
@@ -286,7 +408,7 @@ const QUESTIONS = [
         ))}
       </ul>
 
-      <p class="mono secteur__cle">Les quatre communes limitrophes de {SITE.ville}</p>
+      <p class="mono secteur__cle">Les {enLettres(LIMITROPHES.length)} communes limitrophes de {SITE.ville}</p>
       <ul class="secteur__liste">
         {LIMITROPHES.map((c) => (
           <li class={c.note ? 'secteur__item secteur__item--cle' : 'secteur__item'}>
@@ -296,143 +418,160 @@ const QUESTIONS = [
         ))}
       </ul>
       <p class="secteur__pied">
-        Boxing Center accueille les habitants de {SITE.ville} et de l’{SITE.secteur}
-        dans deux clubs. Accès par {VILLE.routes.valeur}&nbsp;; en transports,
-        {' '}{VILLE.bus.valeur}.
+        Boxing Center accueille les habitants de {SITE.ville} et de l’{SITE.secteur} dans ses
+        clubs de {SC.nomCourt} et de {PT.nomCourt}. Accès par {VILLE.routes.valeur}&nbsp;; en
+        transports, {VILLE.bus.valeur}.
       </p>
     </div>
   </section>
 
-  {/* ─────────── 10 — CONVERGENCE ─────────── */}
-  <section class="section convergence" aria-labelledby="t-convergence">
+  {/* ─────────── 09 — DÉCIDER ─────────── */}
+  <section class="section convergence" id="decider" aria-labelledby="t-convergence">
     <div class="enveloppe convergence__inner">
-      <p class="cartouche"><span class="cartouche__num">10</span><span>Décider</span></p>
+      <p class="cartouche"><span class="cartouche__num">09</span><span>Décider</span></p>
       <h2 id="t-convergence">
-        Deux clubs.<br />
-        <span class="convergence__accent">Un seul qui te correspond.</span>
+        Ta discipline a désigné ton club.<br />
+        <span class="convergence__accent">Il te reste à réserver chez lui.</span>
       </h2>
       <p class="lead convergence__texte">
-        Réponds à deux questions et on te dit lequel viser et à quel moment
-        venir. Si tu préfères demander, écris-nous en deux lignes&nbsp;: on te
-        répond avec un créneau.
+        La séance d’essai se réserve sur le site du club. Si tu hésites encore entre les
+        deux, réponds aux deux questions du moteur, ou écris-nous en deux lignes&nbsp;: on
+        te répond avec un créneau.
       </p>
       <div class="convergence__actions">
-        <a class="bouton bouton--signal" href={route('quel-club').chemin}>
-          <span>Trouver mon club</span><span class="fleche" aria-hidden="true">→</span>
-        </a>
+        {CLUBS.map((c) => (
+          <a class="bouton bouton--signal" href={c.tarifs} rel="noopener">
+            <span>Réserver à {c.nomCourt}</span><span class="fleche" aria-hidden="true">↗</span>
+          </a>
+        ))}
         <a class="bouton" href={route('contact').chemin}>
           <span>Poser ma question</span><span class="fleche" aria-hidden="true">→</span>
         </a>
-        <a class="bouton" href={`tel:${CONTACT.telephoneLien.valeur}`}>
-          <span>{CONTACT.telephone.valeur}</span><span class="fleche" aria-hidden="true">↗</span>
-        </a>
       </div>
+      <p class="convergence__lien">
+        <a class="lien" href={route('quel-club').chemin}>La page qui compare les deux clubs, cours par cours →</a>
+      </p>
     </div>
   </section>
 </Base>
 
 <style>
-  /* ── 02 Les deux clubs ─────────────────────────────────────────────── */
-  .clubs__tete {
+  /* ── 02 La règle ───────────────────────────────────────────────────── */
+  .regle__tete {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--e-5) var(--e-8);
     align-items: end;
     margin-bottom: var(--e-7);
   }
-  @media (max-width: 56rem) { .clubs__tete { grid-template-columns: 1fr; } }
-  .clubs h2 { max-width: 14ch; }
-  .clubs__accent { color: var(--signal-texte); }
-  .clubs__tete .lead { max-width: 46ch; }
+  @media (max-width: 56rem) { .regle__tete { grid-template-columns: 1fr; gap: var(--e-4); margin-bottom: var(--e-5); } }
+  .regle h2 { max-width: 18ch; }
+  .regle__accent { color: var(--signal-texte); }
+  .regle__tete .lead { max-width: 46ch; }
 
-  .clubs__liste {
+  .clubs {
     list-style: none;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
     gap: var(--e-5);
-    margin-bottom: var(--e-8);
+    margin-top: var(--e-7);
   }
-  .clubs__liste li {
+  .club {
     display: grid;
     gap: var(--e-3);
     align-content: start;
     padding: var(--e-6);
-    border-top: 2px solid var(--signal);
+    border-top: 2px solid var(--trait);
     background: var(--papier-vif);
+    transition: border-color var(--d-normal) var(--e-sortie), background var(--d-normal) var(--e-sortie);
   }
-  .clubs__cle { color: var(--signal-texte); font-weight: 700; }
-  .clubs__adresse { font-weight: 600; }
-  .clubs__horaires { color: var(--graphite); text-transform: none; letter-spacing: 0.05em; }
-  .clubs__angle { font-size: var(--t-petit); color: var(--texte-faible); }
-  .clubs__actions { display: flex; flex-wrap: wrap; gap: var(--e-2); margin-top: var(--e-3); }
+  /* La fiche du club que le moteur a retenu prend le trait cuivre. */
+  .club.est-retenu { border-top-color: var(--signal-texte); }
+  .club__cle { color: var(--signal-texte); font-weight: 700; }
+  .club__adresse { font-weight: 600; }
+  .club__horaires { color: var(--graphite); text-transform: none; letter-spacing: 0.05em; }
+  .club__singularite { font-size: var(--t-petit); color: var(--texte-faible); }
+  .club__trajet {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4em;
+    margin-top: var(--e-2);
+    font-size: var(--t-petit);
+  }
+  .club__code {
+    padding: 0.12rem 0.5rem;
+    border-radius: 0.25rem;
+    background: var(--encre);
+    color: var(--papier-vif);
+    font-family: var(--police-mono);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .club__code--metro { background: var(--signal-texte); }
+  .club__puis { color: var(--graphite); }
+  .club__arrivee { color: var(--graphite); text-transform: none; letter-spacing: 0.05em; margin-left: 0.2em; }
+  .club__lien { justify-self: start; margin-top: var(--e-2); font-size: var(--t-petit); }
 
-  /* ── 04 Disciplines ────────────────────────────────────────────────── */
-  .disciplines__tete {
+  /* ── 03 Le reste du planning ───────────────────────────────────────── */
+  .cours__tete {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.1fr 0.9fr;
     gap: var(--e-5) var(--e-8);
     align-items: end;
     margin-bottom: var(--e-7);
   }
-  @media (max-width: 56rem) { .disciplines__tete { grid-template-columns: 1fr; } }
-  .disciplines__intro { max-width: 46ch; }
-  .disciplines__club + .disciplines__club { margin-top: var(--e-8); }
-  .disciplines__cle { color: var(--signal-texte); margin-bottom: var(--e-4); }
+  @media (max-width: 56rem) { .cours__tete { grid-template-columns: 1fr; } }
+  .cours h2 { max-width: 22ch; }
+  .cours__accent { color: var(--signal-texte); }
+  .cours__tete .lead { max-width: 46ch; }
 
-  .disciplines__liste { list-style: none; }
-  .disciplines__liste li {
-    display: grid;
-    grid-template-columns: 3rem 1fr;
-    gap: var(--e-4);
-    align-items: baseline;
-    padding: var(--e-4) 0;
+  .tableau { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .tableau:focus-visible { outline: 2px solid var(--signal-texte); outline-offset: 4px; }
+  .grille { width: 100%; min-width: 34rem; border-collapse: collapse; }
+  .grille th, .grille td {
+    padding: var(--e-4) var(--e-3);
     border-top: 1px solid var(--trait);
-    transition: padding-left var(--d-normal) var(--e-sortie);
+    text-align: left;
+    vertical-align: top;
+    font-size: var(--t-petit);
   }
-  .disciplines__liste li:last-child { border-bottom: 1px solid var(--trait); }
-  .disciplines__liste li:hover { padding-left: var(--e-3); }
-  .disc__num { color: var(--signal-texte); font-weight: 700; }
-  .disc__nom { font-size: var(--t-h3); margin-bottom: 0.2rem; }
-  .disc__detail { font-size: var(--t-petit); color: var(--texte-faible); max-width: 56ch; }
-  .disciplines__source { margin-top: var(--e-4); color: var(--graphite); text-transform: none; letter-spacing: 0.04em; }
-
-  /* ── 05 Preuve ─────────────────────────────────────────────────────── */
-  .preuve__tete { max-width: 56rem; margin-bottom: var(--e-7); }
-  .preuve h2 { max-width: 18ch; margin-bottom: var(--e-4); }
-
-  /* ── 06 Première séance ────────────────────────────────────────────── */
-  .premiere__inner {
-    display: grid;
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-    gap: var(--e-8);
-    align-items: center;
+  .grille tbody tr:last-child th, .grille tbody tr:last-child td { border-bottom: 1px solid var(--trait); }
+  .grille thead th {
+    padding-top: 0;
+    border-top: 0;
+    font-family: var(--police-mono);
+    font-size: var(--t-micro);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--graphite);
+    font-weight: 400;
   }
-  @media (max-width: 62rem) { .premiere__inner { grid-template-columns: 1fr; } }
-  .premiere h2 { max-width: 16ch; margin-bottom: var(--e-6); }
-  .premiere__etapes { list-style: none; display: grid; }
-  .premiere__etapes li {
-    display: grid;
-    grid-template-columns: 2.5rem 1fr;
-    gap: var(--e-4);
-    padding: var(--e-4) 0;
-    border-top: 1px solid var(--trait);
-  }
-  .premiere__etapes .mono { color: var(--signal-texte); padding-top: 0.3em; font-weight: 700; }
-  .premiere__etapes p { font-size: var(--t-petit); color: var(--texte-faible); max-width: 56ch; }
-  .premiere__etapes strong { color: var(--encre); font-weight: 600; }
-  .premiere__lien { display: inline-block; margin-top: var(--e-5); font-size: var(--t-petit); }
+  .grille thead th:not(:first-child) { color: var(--signal-texte); font-weight: 700; }
+  .grille tbody th { font-weight: 600; white-space: nowrap; padding-left: 0; }
+  .grille__page { color: inherit; text-decoration: none; border-bottom: 1px solid var(--trait); transition: border-color var(--d-rapide) var(--e-mecanique); }
+  .grille__page:hover { border-color: var(--signal-texte); color: var(--signal-texte); }
+  .grille td.est-publie { color: var(--texte); }
+  .grille td.est-vide { color: var(--graphite); }
+  /* La ligne où un seul club publie : c'est là que le club se lit sans le moteur. */
+  .grille__ligne--unique th { color: var(--signal-texte); }
+  .grille__ligne--unique td.est-publie { font-weight: 600; }
+  .grille__ligne { transition-property: opacity, transform; }
+  .grille tbody tr:hover th, .grille tbody tr:hover td { background: color-mix(in srgb, var(--papier) 6%, transparent); }
+  .cours__sources { margin-top: var(--e-6); text-transform: none; letter-spacing: 0.04em; }
 
-  /* ── 07 Y aller ────────────────────────────────────────────────────── */
+  /* ── 05 Y aller ────────────────────────────────────────────────────── */
   .trajet__inner {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
     gap: var(--e-8);
-    align-items: center;
+    align-items: start;
   }
   @media (max-width: 62rem) { .trajet__inner { grid-template-columns: 1fr; gap: var(--e-6); } }
-  .trajet h2 { max-width: 16ch; margin-bottom: var(--e-4); }
+  .trajet h2 { max-width: 22ch; margin-bottom: var(--e-4); }
   .trajet__accent { color: var(--signal-texte); }
-  .trajet .lead { max-width: 50ch; }
+  .trajet .lead { max-width: 52ch; }
+  .trajet__voiture { margin-top: var(--e-4); color: var(--graphite); text-transform: none; letter-spacing: 0.05em; max-width: 52ch; }
   .trajet__actions { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-6); }
 
   .trajet__lignes { list-style: none; display: grid; gap: var(--e-3); }
@@ -452,6 +591,7 @@ const QUESTIONS = [
       transform var(--d-normal) var(--e-sortie);
   }
   .trajet__lignes a:hover { border-color: var(--signal-texte); transform: translateX(4px); }
+  .trajet__lignes li.est-retenu a { border-color: var(--signal-texte); }
   .trajet__code {
     grid-area: code;
     display: grid;
@@ -468,8 +608,34 @@ const QUESTIONS = [
   .trajet__code--metro { background: var(--signal-texte); }
   .trajet__parcours { grid-area: parcours; font-weight: 600; font-size: var(--t-petit); }
   .trajet__jours { grid-area: jours; color: var(--graphite); text-transform: none; letter-spacing: 0.05em; }
+  .trajet__avertissement { margin-top: var(--e-4); font-size: var(--t-micro); color: var(--graphite); max-width: 52ch; }
 
-  /* ── 08 Questions ──────────────────────────────────────────────────── */
+  /* ── 06 Le premier jour ────────────────────────────────────────────── */
+  .premiere__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: var(--e-8);
+    align-items: center;
+  }
+  @media (max-width: 62rem) { .premiere__inner { grid-template-columns: 1fr; } }
+  .premiere h2 { max-width: 20ch; margin-bottom: var(--e-4); }
+  .premiere__accent { color: var(--signal-texte); }
+  .premiere__intro { max-width: 48ch; margin-bottom: var(--e-6); }
+  .premiere__etapes { list-style: none; display: grid; }
+  .premiere__etapes li {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: var(--e-4);
+    padding: var(--e-4) 0;
+    border-top: 1px solid var(--trait);
+  }
+  .premiere__etapes .mono { color: var(--signal-texte); padding-top: 0.3em; font-weight: 700; }
+  .premiere__etapes p { font-size: var(--t-petit); color: var(--texte-faible); max-width: 56ch; }
+  .premiere__etapes strong { color: var(--encre); font-weight: 600; }
+  .premiere__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e-4); margin-top: var(--e-6); }
+  .premiere__lien { font-size: var(--t-petit); }
+
+  /* ── 07 Cas par cas ────────────────────────────────────────────────── */
   .questions__inner {
     display: grid;
     grid-template-columns: 0.85fr 1.15fr;
@@ -477,18 +643,20 @@ const QUESTIONS = [
     align-items: start;
   }
   @media (max-width: 62rem) { .questions__inner { grid-template-columns: 1fr; gap: var(--e-6); } }
-  .questions__tete h2 { max-width: 16ch; margin-bottom: var(--e-4); }
+  .questions__tete h2 { max-width: 18ch; margin-bottom: var(--e-4); }
+  .questions__accent { color: var(--signal-texte); }
   .questions__tete .lead { max-width: 40ch; }
 
-  /* ── 09 Secteur ────────────────────────────────────────────────────── */
+  /* ── 08 Le secteur ─────────────────────────────────────────────────── */
   .secteur__tete {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.1fr 0.9fr;
     gap: var(--e-5) var(--e-8);
     align-items: end;
     margin-bottom: var(--e-7);
   }
   @media (max-width: 62rem) { .secteur__tete { grid-template-columns: 1fr; } }
+  .secteur h2 { max-width: 24ch; }
   .secteur__accent { color: var(--signal-texte); }
   .secteur__intro { max-width: 48ch; }
 
@@ -520,7 +688,6 @@ const QUESTIONS = [
     font-weight: 700;
     letter-spacing: -0.015em;
   }
-  .carte__note { font-size: var(--t-petit); color: var(--texte-faible); }
   .carte__trajet {
     display: flex;
     flex-wrap: wrap;
@@ -558,11 +725,39 @@ const QUESTIONS = [
   .secteur__note { font-size: var(--t-micro); color: var(--graphite); }
   .secteur__pied { margin-top: var(--e-6); max-width: 68ch; font-size: var(--t-petit); color: var(--texte-faible); }
 
-  /* ── 10 Convergence ────────────────────────────────────────────────── */
-  .convergence { background: var(--papier-creuse); }
-  .convergence__inner { max-width: 48rem; }
+  /* ── 09 Décider ────────────────────────────────────────────────────── */
+  .convergence__inner { max-width: 52rem; }
   .convergence h2 { margin-bottom: var(--e-5); }
   .convergence__accent { color: var(--signal-texte); }
   .convergence__texte { max-width: 52ch; color: var(--texte-faible); }
   .convergence__actions { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-7); }
+  .convergence__lien { margin-top: var(--e-5); font-size: var(--t-petit); }
 </style>
+
+<script>
+  /**
+   * Le club retenu par le moteur se lit partout où la page nomme un club :
+   * la fiche et la carte de trajet prennent le trait, les portes « planning »
+   * et « appeler » changent de destination. Le club vient de la barre de
+   * parcours, jamais d'ici ; sans script, tout reste à Saint-Cyprien, le club
+   * que les transports en commun desservent.
+   */
+  const camel = (id: string) => id.split('-').map((m) => m.charAt(0).toUpperCase() + m.slice(1)).join('');
+  const suivre = () => {
+    const club = document.querySelector<HTMLElement>('[data-parcours]')?.dataset.club ?? '';
+    for (const el of document.querySelectorAll<HTMLElement>('[data-fiche-club]')) {
+      el.classList.toggle('est-retenu', Boolean(club) && el.dataset.ficheClub === club);
+    }
+    if (!club) return;
+    const cle = camel(club);
+    for (const a of document.querySelectorAll<HTMLAnchorElement>('[data-lien-club]')) {
+      const href = a.dataset[`href${cle}`];
+      const nom = a.dataset[`nom${cle}`];
+      if (href) a.href = href;
+      const cible = a.querySelector<HTMLElement>('[data-nom-club]');
+      if (cible && nom) cible.textContent = nom;
+    }
+  };
+  document.addEventListener('parcours:maj', suivre);
+  suivre();
+</script>
