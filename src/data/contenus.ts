@@ -38,7 +38,7 @@ export const CONTENUS: readonly Contenu[] = [
     id: 'boxe-anglaise',
     h1: 'Cours de boxe anglaise près de Tournefeuille',
     chapeau:
-      'La boxe anglaise se pratique aux poings, avec des gants, encadré. Aucun niveau n’est demandé pour commencer. Depuis Tournefeuille, les deux clubs la proposent : Saint-Cyprien, à quatre minutes du métro A, et Portet-sur-Garonne, par la rocade.',
+      'La boxe anglaise se pratique aux poings, avec des gants, encadré. Tu peux commencer sans aucun passé sportif. Depuis Tournefeuille, les deux clubs la proposent : Saint-Cyprien, à quatre minutes du métro A, et Portet-sur-Garonne, par la rocade.',
     photoHero: 'cours-boxe-tournefeuille',
     photoSecondaire: 'coach-boxe-tournefeuille',
     promesse: 'Apprendre à boxer, encadré, sans rien avoir à prouver à personne.',
@@ -49,9 +49,9 @@ export const CONTENUS: readonly Contenu[] = [
           'Le direct, le crochet, l’uppercut, et le jab qui prépare tout le reste. Ça paraît peu, et c’est ce qui rend la boxe dense : avec quatre coups, tout se joue dans les appuis, la distance et la garde. C’est un sport de placement plus que de puissance. C’est pour ça qu’on peut y progresser vite sans avoir jamais fait de sport.',
       },
       {
-        titre: 'Tu ne prendras pas de coups le premier jour',
+        titre: 'Le premier jour, au sac et à la corde',
         texte:
-          'L’opposition arrive plus tard, et seulement si tu la veux. Un débutant travaille au sac, à la corde, aux pattes d’ours avec un coach, et sur le déplacement à vide. Beaucoup de pratiquants s’entraînent des mois sans jamais faire d’opposition, et progressent quand même.',
+          'L’opposition arrive plus tard, et seulement si tu la veux. Les premières séances se passent au sac, à la corde, aux pattes d’ours tenues par un coach, et en déplacement à vide. Beaucoup de pratiquants s’entraînent des mois sans jamais faire d’opposition, et progressent quand même.',
       },
       {
         titre: 'Deux clubs, deux façons d’y aller',
@@ -59,14 +59,14 @@ export const CONTENUS: readonly Contenu[] = [
           'Saint-Cyprien publie la Boxe Anglaise, l’Open Sparring et les PAOS ; Portet publie la boxe anglaise. Le contenu est le même : ce qui change, c’est le trajet. Saint-Cyprien se fait en métro, Portet en voiture ou en bus. Choisis celui qui rentre dans ta semaine.',
       },
       {
-        titre: 'Ce que ça change dans ta semaine',
+        titre: 'Deux séances par semaine, et ce qu’elles changent',
         texte:
-          'Deux séances par semaine suffisent à sentir une différence en un mois : le souffle d’abord, la posture ensuite. La boxe occupe complètement la tête — difficile de penser à sa journée pendant un round au sac. Beaucoup viennent pour la forme et restent pour ça.',
+          'En un mois à ce rythme, le souffle change d’abord, puis la posture. La boxe occupe complètement la tête — difficile de penser à sa journée pendant un round au sac. Beaucoup viennent pour la forme et restent pour ça.',
       },
     ],
     seance: [
       'Échauffement : corde, mobilité, déplacements à vide',
-      'Technique : un geste, décomposé, répété lentement puis en rythme',
+      'Technique : le geste du jour, lent d’abord, puis en rythme',
       'Sac ou pattes d’ours : l’application, avec correction du coach',
       'Renforcement : gainage, abdominaux, poids du corps',
       'Retour au calme et étirements',
@@ -253,7 +253,7 @@ export const CONTENUS: readonly Contenu[] = [
     ],
     faq: [
       {
-        titre: 'À partir de quel âge ?',
+        titre: 'À partir de quel âge, à Saint-Cyprien et à Portet ?',
         texte:
           'Chaque club publie une Baby Boxe pour les plus petits, puis une boxe éducative. Les tranches d’âge exactes figurent sur les plannings et peuvent bouger d’une saison à l’autre : c’est la seule source à jour.',
       },
