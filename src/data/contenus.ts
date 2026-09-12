@@ -109,7 +109,7 @@ export const CONTENUS: readonly Contenu[] = [
           'Le kick-boxing autorise les poings et les jambes. La boxe thaï y ajoute les genoux, les coudes et le corps à corps : c’est ce qui en fait la discipline la plus complète debout. Saint-Cyprien la publie sous le nom « Boxe Thaï / K1 » — le K1 étant le règlement de compétition le plus courant.',
       },
       {
-        titre: 'Où ça se passe',
+        titre: 'Le club de kick-boxing près de Tournefeuille',
         texte:
           'Au 11 rue Sainte-Lucie, à Toulouse. Le club est à quatre minutes à pied de la station Saint-Cyprien – République, sur la ligne A. Depuis Tournefeuille, le Linéo L3 t’amène aux Arènes et le métro fait les deux stations restantes.',
       },
