@@ -124,7 +124,7 @@ export const ROUTES: readonly Route[] = [
     description:
       'Ce qu’il faut apporter, ce que tu vas faire et ce que tu ne feras pas : le déroulé d’un premier cours pour un débutant venu de Tournefeuille.',
     menu: false,
-    index: true,
+    index: false,
   },
   {
     id: 'transports',
@@ -171,7 +171,7 @@ export const ROUTES: readonly Route[] = [
     description:
       'Une question avant de te déplacer depuis Tournefeuille ? Écris-nous, on te répond avec le club, la discipline et le créneau. Téléphone : 09 39 03 67 48.',
     menu: true,
-    index: true,
+    index: false,
   },
   {
     id: 'merci',
@@ -201,7 +201,7 @@ export const ROUTES: readonly Route[] = [
     titre: 'Mentions légales | Boxing Center Tournefeuille',
     description: 'Mentions légales du site boxingcenter-tournefeuille.fr.',
     menu: false,
-    index: true,
+    index: false,
   },
   {
     id: 'confidentialite',
@@ -211,7 +211,7 @@ export const ROUTES: readonly Route[] = [
     titre: 'Politique de confidentialité | Boxing Center Tournefeuille',
     description: 'Ce que devient une demande envoyée depuis boxingcenter-tournefeuille.fr.',
     menu: false,
-    index: true,
+    index: false,
   },
 ] as const;
 

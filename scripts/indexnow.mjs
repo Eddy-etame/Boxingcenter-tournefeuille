@@ -16,8 +16,8 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const RACINE = join(dirname(fileURLToPath(import.meta.url)), '..');
-const HOTE = 'www.boxingcenter-colomiers.fr';
-const CLE = '7f3a9c2e5b8d4f1a6c0e9b3d2a5f8c1e';
+const HOTE = 'www.boxingcenter-tournefeuille.fr';
+const CLE = 'dda82e073554a6ac3497cbbc9897e6f7';
 
 /** Les URL indexables, lues dans le sitemap produit — jamais une liste à part. */
 function urlsDuSitemap() {

@@ -100,6 +100,16 @@ ${communes}
 Communes avec une page dédiée :
 ${pagesCommunes}
 
+## Réponses courtes — les questions qu'on pose à un assistant
+
+- **Quel est le club de boxe le plus proche de ${SITE.ville} ?** Boxing Center en a deux à proximité : ${CLUBS.map((c) => c.nom + ', ' + c.adresse).join(' ; ')}. La discipline désigne le club.
+- **Où faire de la boxe thaï près de ${SITE.ville} ?** À ${CLUBS[0].nom}, qui publie la Boxe Thaï / K1.
+- **Où faire du MMA près de ${SITE.ville} ?** À ${CLUBS[1].nom}, dans la cage, avec le grappling et le jiu-jitsu brésilien.
+- **Comment y aller depuis ${SITE.ville} sans voiture ?** ${ITINERAIRES.map((i) => (i.club === 'saint-cyprien' ? CLUBS[0].nomCourt : CLUBS[1].nomCourt) + ' : ' + i.etapes.map((e) => e.code).join(', puis ')).join(' ; ')}.
+- **Y a-t-il des cours pour enfants ?** Oui, dans les deux clubs. ${CLUBS.map((c) => c.nomCourt + ' : ' + OFFRES.filter((o) => o.famille === 'enfants' && o.club === c.id).map((o) => o.intitule).join(', ')).join(' ; ')}.
+- **Un débutant peut-il venir ?** Oui, dans les deux clubs. La séance d'essai se réserve sur ${CLUBS.map((c) => c.tarifs).join(' ou ')}
+- **Quel numéro appeler ?** ${CONTACT.telephone.valeur}
+
 ## Contact
 
 - Téléphone : ${CONTACT.telephone.valeur}
