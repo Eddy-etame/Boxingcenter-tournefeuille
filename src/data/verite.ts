@@ -116,7 +116,7 @@ export const CLUBS: readonly Club[] = [
       { cle: 'Équipement', valeur: '1 ring, 1 cage', source: 'club-boxe-toulouse.com' },
     ],
     angle:
-      'Le club de ville : on y va en métro, on en ressort à quatre minutes d’une station, et c’est le seul du réseau à publier la Boxe Thaï et le K1.',
+      'Le club de ville : on y va en métro, on en ressort à quatre minutes d’une station, et il publie la Boxe Thaï et le K1.',
     teinte: 'fresque',
   },
   {
@@ -140,7 +140,7 @@ export const CLUBS: readonly Club[] = [
     fermetureTexte: '21h30',
     acces:
       'Par la D632 puis la rocade ouest et l’A64, sortie Portet. En bus, la 48 rejoint Basso Cambo, où la 117 Express repart vers la route d’Espagne.',
-    singularite: 'Le seul club du réseau avec une cage MMA, et le seul à publier le grappling.',
+    singularite: 'Une cage MMA, un ring et le grappling, sur 600 m² au bord de la route d’Espagne.',
     faits: [
       { cle: 'Surface', valeur: '600 m²', source: 'boxing-center-portet.fr' },
       { cle: 'Signature', valeur: 'MMA en cage', source: 'boxing-center-portet.fr' },
@@ -148,7 +148,7 @@ export const CLUBS: readonly Club[] = [
       { cle: 'Disciplines', valeur: '9 publiées', source: 'boxing-center-portet.fr' },
     ],
     angle:
-      'Le club du sud de l’agglomération, sur la route d’Espagne — 600 m², un ring, et la seule cage MMA du réseau.',
+      'Le club du sud de l’agglomération, sur la route d’Espagne — 600 m², un ring et une cage MMA.',
     teinte: 'signal',
   },
 ] as const;

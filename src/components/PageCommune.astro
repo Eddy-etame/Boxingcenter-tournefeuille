@@ -55,7 +55,7 @@ const voisinage = c.toucheLeClub
 const REPONSES: Record<string, string> = {
   [`club de boxe ${c.nom}`]: `${DESTINATION.nom}, ${DESTINATION.adresse}. ${voisinage}, et le club accueille ${DESTINATION.horairesCourt}.`,
   [`boxe anglaise ${c.nom}`]: `La boxe anglaise est l’un des intitulés publiés par le club. Les poings seuls, aucun niveau demandé à l’entrée.`,
-  [`club MMA ${c.nom}`]: `Le MMA s’entraîne dans la cage du club — la seule du réseau Boxing Center. Le grappling et le jiu-jitsu brésilien y sont publiés à part, sans aucune frappe.`,
+  [`club MMA ${c.nom}`]: `Le MMA s’entraîne dans la cage de Portet-sur-Garonne, la plus proche de ${c.nom} dans le réseau. Le grappling et le jiu-jitsu brésilien y sont publiés à part, sans aucune frappe.`,
   [`salle MMA ${c.nom}`]: `La cage est à ${DESTINATION.ville}, ${DESTINATION.adresse}. C’est la salle MMA à viser depuis ${c.nom}.`,
   [`sport de combat ${c.nom}`]: `Toutes les disciplines publiées, de la Baby boxe à la préparation physique. On commence par celle qui correspond à ce qu’on cherche, on change en cours d’année si besoin.`,
   [`club kick boxing ${c.nom}`]: `Le kick-boxing est publié pour les adultes et pour les enfants/ados. C’est la boxe pieds-poings du club.`,
@@ -118,11 +118,10 @@ const LEGENDE = motifs(c.nom).map((m) => ({ motif: m, reponse: REPONSES[m] }));
     <div class="enveloppe">
       <p class="cartouche"><span class="cartouche__num">02</span><span>Depuis {c.nom}</span></p>
       <div class="depuis__tete">
-        <h2 id="t-depuis">Comment tu y vas.</h2>
+        <h2 id="t-depuis">La route depuis {c.nom}.</h2>
         <p class="lead faible">
-          {c.population}, {c.intercommunalite}. Voilà la route, les bus, et les
-          communes autour — de quoi savoir en trente secondes si c’est jouable
-          deux fois par semaine.
+          {c.population}, {c.intercommunalite}. Routes, lignes de bus, communes voisines :
+          l’essentiel pour décider si deux entraînements par semaine restent tenables.
         </p>
       </div>
 
@@ -184,10 +183,9 @@ const LEGENDE = motifs(c.nom).map((m) => ({ motif: m, reponse: REPONSES[m] }));
     <div class="enveloppe">
       <p class="cartouche"><span class="cartouche__num">03</span><span>Légende</span></p>
       <div class="legende__tete">
-        <h2 id="t-legende">Les questions qu’on nous pose le plus.</h2>
+        <h2 id="t-legende">Les recherches, une par une.</h2>
         <p class="lead faible">
-          À gauche, ce que les gens cherchent. À droite, la réponse en une
-          phrase.
+          Ce que les gens cherchent, et en face, la réponse courte.
         </p>
       </div>
       <dl class="legende__liste">
@@ -206,10 +204,9 @@ const LEGENDE = motifs(c.nom).map((m) => ({ motif: m, reponse: REPONSES[m] }));
     <div class="enveloppe">
       <p class="cartouche"><span class="cartouche__num">04</span><span>Au club</span></p>
       <div class="auclub__tete">
-        <h2 id="t-auclub">Ce que le club publie.</h2>
+        <h2 id="t-auclub">Au programme du club.</h2>
         <p class="lead faible">
-          Voilà tout ce qui se pratique, avec les noms exacts que tu verras sur
-          le planning. {DESTINATION.singularite}
+          Les cours, sous les noms que porte le planning. {DESTINATION.singularite}
         </p>
       </div>
       <ul class="auclub__liste">
@@ -240,7 +237,7 @@ const LEGENDE = motifs(c.nom).map((m) => ({ motif: m, reponse: REPONSES[m] }));
     <div class="enveloppe questions__inner">
       <div>
         <p class="cartouche"><span class="cartouche__num">05</span><span>Questions</span></p>
-        <h2 id="t-questions">Ce qu’on nous demande<br />depuis {c.nom}.</h2>
+        <h2 id="t-questions">Les questions qu’on reçoit<br />de {c.nom}.</h2>
         {c.pont && (
           <p class="pont">
             {c.pont.texte}
@@ -266,13 +263,13 @@ const LEGENDE = motifs(c.nom).map((m) => ({ motif: m, reponse: REPONSES[m] }));
   <section class="section voisines" aria-labelledby="t-voisines">
     <div class="enveloppe">
       <p class="cartouche"><span class="cartouche__num">06</span><span>Le secteur</span></p>
-      <h2 id="t-voisines">Tu pars d’une autre commune&nbsp;?</h2>
+      <h2 id="t-voisines">Tu démarres d’une autre commune&nbsp;?</h2>
       <ul class="voisines__liste">
         <li class="reveler">
           <a class="carte" href="/">
             <span class="mono carte__cp">{SITE.codePostal}</span>
             <span class="carte__nom">{SITE.ville}</span>
-            <span class="carte__note">La ville du site — {SITE.gentile}</span>
+            <span class="carte__note">Le site de départ — {SITE.gentile}</span>
           </a>
         </li>
         {autres.map((x, i) => (
@@ -297,13 +294,12 @@ const LEGENDE = motifs(c.nom).map((m) => ({ motif: m, reponse: REPONSES[m] }));
     <div class="enveloppe convergence__inner">
       <p class="cartouche"><span class="cartouche__num">07</span><span>Décider</span></p>
       <h2 id="t-conv">
-        Tu sais où c’est.<br />
-        <span class="convergence__accent">Reste à choisir ton cours.</span>
+        Tu connais le chemin.<br />
+        <span class="convergence__accent">Choisis ton cours.</span>
       </h2>
       <p class="lead convergence__texte">
-        Réponds à deux questions et on te dit quoi viser et quand venir. Si tu
-        préfères demander, écris-nous en deux lignes&nbsp;: on te répond avec un
-        créneau.
+        Deux questions, et on t’oriente vers le bon cours et le bon moment. Pour demander
+        directement, écris-nous deux lignes&nbsp;: on te répond avec un créneau.
       </p>
       <div class="convergence__actions">
         <a class="bouton bouton--signal" href={route('contact').chemin}>

@@ -135,7 +135,7 @@ export const CONTENUS: readonly Contenu[] = [
       {
         titre: 'Où faire de la boxe thaï près de Tournefeuille ?',
         texte:
-          'À Boxing Center Saint-Cyprien, 11 rue Sainte-Lucie à Toulouse. C’est le seul club du réseau qui publie la Boxe Thaï / K1. Le trajet depuis Tournefeuille se fait en Linéo L3 jusqu’aux Arènes, puis en métro A.',
+          'À Boxing Center Saint-Cyprien, 11 rue Sainte-Lucie à Toulouse. Le club publie la Boxe Thaï / K1, et c’est le plus proche de Tournefeuille à le faire. Le trajet depuis Tournefeuille se fait en Linéo L3 jusqu’aux Arènes, puis en métro A.',
       },
       {
         titre: 'Boxe thaï, K1, kick-boxing : quelle différence ?',
@@ -158,7 +158,7 @@ export const CONTENUS: readonly Contenu[] = [
     id: 'mma',
     h1: 'Club MMA et grappling près de Tournefeuille',
     chapeau:
-      'Le MMA combine la frappe debout, le corps à corps et le combat au sol. Depuis Tournefeuille, il se pratique à Boxing Center Portet-sur-Garonne : c’est le seul club du réseau avec une cage, et l’entraînement se fait dedans. Le grappling et le jiu-jitsu brésilien y sont publiés à part, sans aucune frappe.',
+      'Le MMA combine la frappe debout, le corps à corps et le combat au sol. Depuis Tournefeuille, il se pratique à Boxing Center Portet-sur-Garonne : c’est la cage du réseau la plus proche de Tournefeuille, et l’entraînement se fait dedans. Le grappling et le jiu-jitsu brésilien y sont publiés à part, sans aucune frappe.',
     photoHero: 'cage-mma-tournefeuille',
     photoSecondaire: 'boxe-thai-tournefeuille',
     promesse: 'S’entraîner dans une vraie cage, avec des gens dont c’est le métier.',
@@ -171,7 +171,7 @@ export const CONTENUS: readonly Contenu[] = [
       {
         titre: 'À quoi sert la cage',
         texte:
-          'La paroi fait partie du jeu. On y travaille les appuis contre le grillage, les relevés, les sorties de contrôle — des situations qui n’existent pas sur un tatami ouvert. Portet-sur-Garonne est le seul club du réseau à en avoir une.',
+          'La paroi fait partie du jeu. On y travaille les appuis contre le grillage, les relevés, les sorties de contrôle — des situations qui n’existent pas sur un tatami ouvert. Depuis Tournefeuille, la plus proche du réseau est à Portet-sur-Garonne.',
       },
       {
         titre: 'Le grappling, sans les coups',
@@ -195,7 +195,7 @@ export const CONTENUS: readonly Contenu[] = [
       {
         titre: 'Où est la salle MMA la plus proche de Tournefeuille ?',
         texte:
-          'À Portet-sur-Garonne, au 61 route d’Espagne. C’est la seule cage du réseau Boxing Center, et l’entraînement de MMA s’y déroule dedans.',
+          'À Portet-sur-Garonne, au 61 route d’Espagne. C’est la cage du réseau Boxing Center la plus proche de Tournefeuille, et l’entraînement de MMA s’y déroule dedans.',
       },
       {
         titre: 'On peut débuter sans rien connaître ?',
