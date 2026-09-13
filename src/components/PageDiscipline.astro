@@ -14,6 +14,7 @@ import Photo from '../components/Photo.astro';
 import { contenu } from '../data/contenus';
 import { offresDeLaPage, clubsDeLaPage, type PageDiscipline } from '../data/offres';
 import { club, SITE, CONTACT } from '../data/verite';
+import { pageClub, clubEnVitrine } from '../data/pages-club';
 import { ROUTES, route } from '../data/routes';
 
 interface Props { id: PageDiscipline }
@@ -26,6 +27,11 @@ const offres = offresDeLaPage(id);
    temps ; deux quand les deux la proposent. La page ne nomme jamais un club
    qui ne la publie pas. */
 const clubs = clubsDeLaPage(id).map(club);
+/* Les deux portes vers le club : la page de la discipline, et son site.
+   En tête de page, le club qui publie une page pour la discipline. */
+const vitrine = clubEnVitrine(clubs, id);
+const porteVitrine = pageClub(vitrine, id);
+const portesClubs = Object.fromEntries(clubs.map((cl) => [cl.id, pageClub(cl, id)]));
 const autres = ROUTES.filter(
   (x) => x.menu && x.id !== id && x.id !== 'accueil' && x.id !== 'contact' && x.id !== 'ta-seance'
 );
@@ -48,15 +54,19 @@ const autres = ROUTES.filter(
       <p class="tete__chapeau">{c.chapeau}</p>
 
       <div class="tete__actions">
-        <a class="bouton bouton--signal" href="#au-club">
-          <span>Ce que le club publie</span>
-          <span class="fleche" aria-hidden="true">↓</span>
+        <a class="bouton bouton--signal" href={porteVitrine.url} rel="noopener">
+          <span>{porteVitrine.libelle}</span>
+          <span class="fleche" aria-hidden="true">↗</span>
         </a>
-        <a class="bouton" href={route('contact').chemin}>
-          <span>Poser ma question</span>
-          <span class="fleche" aria-hidden="true">→</span>
+        <a class="bouton" href={vitrine.site} rel="noopener">
+          <span>Le site du club</span>
+          <span class="fleche" aria-hidden="true">↗</span>
         </a>
       </div>
+      <p class="tete__liens">
+        <a class="lien" href="#au-club">{clubs.length === 1 ? 'Ce que le club publie' : 'Ce que les clubs publient'} ↓</a>
+        <a class="lien" href={route('contact').chemin}>Poser ma question →</a>
+      </p>
       </div>
 
       {/* La photo arrive sur sa plaque, pas en bandeau : c'est un tirage posé
@@ -153,14 +163,17 @@ const autres = ROUTES.filter(
               <div><dt class="mono">Accueil</dt><dd>{cl.horaires.valeur}</dd></div>
             </dl>
             <div class="auclub__portes">
-              <a class="bouton" href={cl.plannings} rel="noopener">
-                <span>Le planning</span><span class="fleche" aria-hidden="true">↗</span>
+              <a class="bouton bouton--signal" href={portesClubs[cl.id].url} rel="noopener">
+                <span>{portesClubs[cl.id].libelle}</span><span class="fleche" aria-hidden="true">↗</span>
+              </a>
+              <a class="bouton" href={cl.site} rel="noopener">
+                <span>Le site du club</span><span class="fleche" aria-hidden="true">↗</span>
               </a>
               <a class="bouton" href={cl.tarifs} rel="noopener">
                 <span>Les tarifs</span><span class="fleche" aria-hidden="true">↗</span>
               </a>
-              <a class="bouton" href={cl.activites} rel="noopener">
-                <span>Toutes les activités</span><span class="fleche" aria-hidden="true">↗</span>
+              <a class="bouton" href={cl.plannings} rel="noopener">
+                <span>Le planning</span><span class="fleche" aria-hidden="true">↗</span>
               </a>
             </div>
           </div>
@@ -278,6 +291,7 @@ const autres = ROUTES.filter(
     color: var(--texte-faible);
   }
   .tete__actions { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-6); }
+  .tete__liens { display: flex; flex-wrap: wrap; gap: var(--e-2) var(--e-5); margin-top: var(--e-4); }
 
   /* ── Corps ───────────────────────────────────────────────────────── */
   .corps__grille { display: grid; grid-template-columns: 1fr 1fr; gap: var(--e-8); }

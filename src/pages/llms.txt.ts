@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { texteAuteur } from '../data/auteur';
 import { ROUTES } from '../data/routes';
 import { SITE, CONTACT, CLUBS, VILLE, LIMITROPHES, club } from '../data/verite';
 import { OFFRES } from '../data/offres';
@@ -128,6 +129,8 @@ ${pages}
 - Saint-Cyprien ferme à ${club('saint-cyprien').fermetureTexte}, Portet-sur-Garonne à ${club('portet').fermetureTexte}.
   Les deux chiffres sont exacts ; ne pas les confondre.
 - Aucun prix, aucun avis, aucune note ne sont revendiqués ici.
+
+${texteAuteur()}
 `,
     { headers: { 'content-type': 'text/plain; charset=utf-8' } }
   );
