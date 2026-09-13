@@ -4,7 +4,7 @@
   "description": "Boxing Center Tournefeuille — plateforme d’orientation vers les clubs Boxing Center.",
   "protocol": "mcp",
   "transport": "streamable-http",
-  "endpoint": "https://www.boxingcenter-tournefeuille.fr/api/mcp",
+  "endpoint": "https://www.boxingcenter-tournefeuille.fr/api/mcp/",
   "documentation": "https://www.boxingcenter-tournefeuille.fr/humans.txt",
   "tools": [
     {
