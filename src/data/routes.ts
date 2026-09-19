@@ -125,7 +125,7 @@ export const ROUTES: readonly Route[] = [
     description:
       'Ce qu’il faut apporter, ce que tu vas faire et ce que tu ne feras pas : le déroulé d’un premier cours pour un débutant venu de Tournefeuille.',
     menu: false,
-    index: false,
+    index: true,
   },
   {
     id: 'transports',
@@ -173,7 +173,7 @@ export const ROUTES: readonly Route[] = [
       'Portet-sur-Garonne, Minimes, États-Unis, Saint-Cyprien et Ramonville : les cinq clubs Boxing Center autour de Tournefeuille, leur adresse et le lien vers leur site.',
     menu: true,
     // hors index : mêmes adresses sur les sept sites de proximité ; liens suivis
-    index: false,
+    index: true,
   },
   {
     id: 'contact',
@@ -184,7 +184,7 @@ export const ROUTES: readonly Route[] = [
     description:
       'Une question avant de te déplacer depuis Tournefeuille ? Écris-nous, on te répond avec le club, la discipline et le créneau. Téléphone : 09 39 03 67 48.',
     menu: true,
-    index: false,
+    index: true,
   },
   {
     id: 'merci',
@@ -214,7 +214,7 @@ export const ROUTES: readonly Route[] = [
     titre: 'Mentions légales | Boxing Center Tournefeuille',
     description: 'Mentions légales du site boxingcenter-tournefeuille.fr.',
     menu: false,
-    index: false,
+    index: true,
   },
   {
     id: 'confidentialite',
@@ -224,7 +224,7 @@ export const ROUTES: readonly Route[] = [
     titre: 'Politique de confidentialité | Boxing Center Tournefeuille',
     description: 'Ce que devient une demande envoyée depuis boxingcenter-tournefeuille.fr.',
     menu: false,
-    index: false,
+    index: true,
   },
 ] as const;
 
