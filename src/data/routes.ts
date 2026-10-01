@@ -27,6 +27,11 @@ export type RouteId =
   | 'fonsorbes'
   | 'plaisance-du-touch'
   | 'nos-clubs'
+  /* conseils:début */
+  | 'conseils'
+  | 'equipement-boxe-thai'
+  | 'mettre-ses-bandes-de-boxe'
+  /* conseils:fin */
   | 'contact'
   | 'merci'
   | 'introuvable'
@@ -175,6 +180,41 @@ export const ROUTES: readonly Route[] = [
     // hors index : mêmes adresses sur les sept sites de proximité ; liens suivis
     index: true,
   },
+  /* conseils:routes */
+  {
+    id: 'conseils',
+    chemin: '/conseils/',
+    nav: 'Conseils matériel',
+    question: 'Quel équipement pour la boxe thaï, et comment poser ses bandes ?',
+    titre: 'Boxe thaï, bandes : les conseils matériel | Tournefeuille',
+    description:
+      'Équipement de boxe thaï, pose des bandes : les conseils de Boxing Center pour les Tournefeuillais qui s’entraînent à Saint-Cyprien ou à Portet-sur-Garonne.',
+    menu: false,
+    index: true,
+  },
+  {
+    id: 'equipement-boxe-thai',
+    chemin: '/conseils/equipement-boxe-thai/',
+    nav: 'Équipement boxe thaï',
+    question: 'Quel équipement faut-il pour commencer la boxe thaï ?',
+    titre: 'Équipement de boxe thaï : la liste pour débuter',
+    description:
+      'Gants, protège-tibias, protège-dents, coquille : l’équipement de boxe thaï et de K1 dans l’ordre des achats, pour s’entraîner depuis Tournefeuille.',
+    menu: false,
+    index: true,
+  },
+  {
+    id: 'mettre-ses-bandes-de-boxe',
+    chemin: '/conseils/mettre-ses-bandes-de-boxe/',
+    nav: 'Mettre ses bandes',
+    question: 'Comment mettre ses bandes de boxe ?',
+    titre: 'Comment mettre ses bandes de boxe, tour par tour',
+    description:
+      'Poignet, jointures, pouce : la pose des bandes de boxe expliquée étape par étape, la bonne longueur, et le signe qu’elles sont trop serrées.',
+    menu: false,
+    index: true,
+  },
+  /* conseils:routes:fin */
   {
     id: 'contact',
     chemin: '/contact/',
