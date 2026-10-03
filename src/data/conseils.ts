@@ -149,14 +149,14 @@ export const CONSEILS: readonly Conseil[] = [
     photo: 'boxe-femme-tournefeuille',
     sujet: 'Conseil · Les bandes',
     publie: '2026-10-02',
-    maj: '2026-10-02',
+    maj: '2026-10-03',
     sections: [
       {
         sur: 'Avant de commencer',
         h2: 'La bonne longueur, et le bon sens.',
         paras: [
           'Prends des bandes de 4,50 m pour une main d’adulte, de 2,50 m pour une petite main : trop courtes, elles ne couvrent pas les jointures ; trop longues, elles font une boule dans le gant. <a class="lien" href="https://www.boutique-de-boxe.com/bandes-de-boxe/" rel="noopener">Les bandes de boxe</a> de Boutique de Boxe, la boutique de matériel du groupe, affichent leur longueur dans le nom du modèle.',
-          'Déroule la bande en entier et repère la boucle du pouce. Vérifie le sens avant de commencer : posée à l’envers, elle laisse le scratch du mauvais côté à la fin.',
+          'Déroule la bande en entier et repère la boucle du pouce. Vérifie le sens avant de commencer : posée à l’envers, elle laisse le scratch du mauvais côté à la fin. Bandes, sous-gants et cordes à sauter sont rangés ensemble dans <a class="lien" href="https://www.boutique-de-boxe.com/accessoires-boxe/" rel="noopener">les accessoires de boxe</a> de Boutique de Boxe.',
         ],
       },
       {
