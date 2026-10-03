@@ -65,7 +65,7 @@ export const CONSEILS: readonly Conseil[] = [
     photo: 'boxe-thai-tournefeuille',
     sujet: 'Conseil · Boxe thaï',
     publie: '2026-10-02',
-    maj: '2026-10-02',
+    maj: '2026-10-03',
     sections: [
       {
         sur: 'La discipline',
@@ -103,7 +103,7 @@ export const CONSEILS: readonly Conseil[] = [
         sur: 'Le short',
         h2: 'Un short thaï, court et large.',
         paras: [
-          'Le short de boxe thaï est court et large, pour lever le genou et frapper du pied sans que le tissu retienne la jambe. Un short de sport classique fait l’affaire les premières semaines ; ensuite, <a class="lien" href="https://www.boutique-de-boxe.com/shorts-de-boxe/" rel="noopener">les shorts de boxe</a> existent en coupe anglaise et en coupe thaï — ne te trompe pas de rayon.',
+          'Le short de boxe thaï est court et large, pour lever le genou et frapper du pied sans que le tissu retienne la jambe. Un short de sport classique fait l’affaire les premières semaines ; ensuite, <a class="lien" href="https://www.boutique-de-boxe.com/shorts-de-boxe/" rel="noopener">les shorts de boxe</a> existent en coupe anglaise et en coupe thaï — ne te trompe pas de rayon. La liste entière, rayon par rayon, est sur la page <a class="lien" href="https://www.boutique-de-boxe.com/materiel-boxe-thai/" rel="noopener">matériel de boxe thaï</a> de Boutique de Boxe.',
           'Pour repartir du club avec l’essentiel, <a class="lien" href="https://boutique.boxingcenter.fr/materiel" rel="noopener">la boutique Boxing Center</a> vend gants, protège-dents et protège-tibias en ligne, à retirer en salle.',
         ],
       },
